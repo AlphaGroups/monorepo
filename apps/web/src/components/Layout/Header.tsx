@@ -68,7 +68,7 @@ const Header = () => {
               </Button>
             </Link>
 
-            <Link href="/lms/src/app/login">
+            <Link href="/lms/login">
               <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
                 LMS Login
               </Button>
@@ -114,7 +114,7 @@ const Header = () => {
                   Register
                 </Button>
               </Link>
-         
+
               <Link href="/lms/login">
                 <Button variant="outline">lms Login</Button>
               </Link>
