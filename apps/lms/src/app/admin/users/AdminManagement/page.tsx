@@ -1,23 +1,58 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Plus, Search, Edit, Trash2, Mail, Phone, Building2 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+"use client";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Mail,
+  Phone,
+  Building2,
+} from "lucide-react";
+import { toast, Toaster } from "sonner";
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  collegeId: z.string().min(1, 'College is required'),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  collegeId: z.string().min(1, "College is required"),
   phone: z.string().optional(),
 });
 
@@ -31,7 +66,7 @@ interface Admin {
   collegeId: string;
   phone?: string;
   avatar?: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   createdAt: string;
   lastLogin?: string;
 }
@@ -39,106 +74,106 @@ interface Admin {
 // Mock data
 const mockAdmins: Admin[] = [
   {
-    id: '1',
-    name: 'Jane Smith',
-    email: 'jane.smith@college.edu',
-    collegeName: 'ABC Institute of Technology',
-    collegeId: 'college-1',
-    phone: '+1-555-0123',
-    status: 'active',
-    createdAt: '2024-01-15',
-    lastLogin: '2 hours ago'
+    id: "1",
+    name: "Jane Smith",
+    email: "jane.smith@college.edu",
+    collegeName: "ABC Institute of Technology",
+    collegeId: "college-1",
+    phone: "+1-555-0123",
+    status: "active",
+    createdAt: "2024-01-15",
+    lastLogin: "2 hours ago",
   },
   {
-    id: '2',
-    name: 'Robert Johnson',
-    email: 'robert.j@university.edu',
-    collegeName: 'XYZ University',
-    collegeId: 'college-2',
-    phone: '+1-555-0456',
-    status: 'active',
-    createdAt: '2024-02-20',
-    lastLogin: '1 day ago'
+    id: "2",
+    name: "Robert Johnson",
+    email: "robert.j@university.edu",
+    collegeName: "XYZ University",
+    collegeId: "college-2",
+    phone: "+1-555-0456",
+    status: "active",
+    createdAt: "2024-02-20",
+    lastLogin: "1 day ago",
   },
   {
-    id: '3',
-    name: 'Maria Garcia',
-    email: 'maria.garcia@tech.edu',
-    collegeName: 'Tech College',
-    collegeId: 'college-3',
-    status: 'inactive',
-    createdAt: '2024-01-10',
-    lastLogin: '1 week ago'
-  }
+    id: "3",
+    name: "Maria Garcia",
+    email: "maria.garcia@tech.edu",
+    collegeName: "Tech College",
+    collegeId: "college-3",
+    status: "inactive",
+    createdAt: "2024-01-10",
+    lastLogin: "1 week ago",
+  },
 ];
 
 const mockColleges = [
-  { id: 'college-1', name: 'ABC Institute of Technology' },
-  { id: 'college-2', name: 'XYZ University' },
-  { id: 'college-3', name: 'Tech College' },
-  { id: 'college-4', name: 'Science Academy' }
+  { id: "college-1", name: "ABC Institute of Technology" },
+  { id: "college-2", name: "XYZ University" },
+  { id: "college-3", name: "Tech College" },
+  { id: "college-4", name: "Science Academy" },
 ];
 
 const AdminManagement = () => {
   const [admins, setAdmins] = useState<Admin[]>(mockAdmins);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
-  const { toast } = useToast();
+  // const { toast } = useToast();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      collegeId: '',
-      phone: '',
+      name: "",
+      email: "",
+      collegeId: "",
+      phone: "",
     },
   });
 
-  const filteredAdmins = admins.filter(admin =>
-    admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.collegeName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAdmins = admins.filter(
+    (admin) =>
+      admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      admin.collegeName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const onSubmit = async (data: FormData) => {
     try {
-      const college = mockColleges.find(c => c.id === data.collegeId);
-      
+      const college = mockColleges.find((c) => c.id === data.collegeId);
+
       if (editingAdmin) {
         // Update existing admin - API call
         const response = await fetch(`/api/admins/${editingAdmin.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...data,
-            collegeName: college?.name || ''
-          })
+            collegeName: college?.name || "",
+          }),
         });
-        
+
         if (response.ok) {
-          setAdmins(prev => prev.map(admin => 
-            admin.id === editingAdmin.id 
-              ? { ...admin, ...data, collegeName: college?.name || '' }
-              : admin
-          ));
-          toast({
-            title: "Admin Updated",
-            description: "Admin details have been updated successfully.",
-          });
+          setAdmins((prev) =>
+            prev.map((admin) =>
+              admin.id === editingAdmin.id
+                ? { ...admin, ...data, collegeName: college?.name || "" }
+                : admin
+            )
+          );
+          toast.success("Admin details have been updated successfully.");
         }
       } else {
         // Create new admin - API call
-        const response = await fetch('/api/admins', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/admins", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...data,
-            collegeName: college?.name || ''
-          })
+            collegeName: college?.name || "",
+          }),
         });
-        
+
         if (response.ok) {
           const newAdmin: Admin = {
             id: Math.random().toString(36).substr(2, 9),
@@ -146,37 +181,30 @@ const AdminManagement = () => {
             email: data.email,
             collegeId: data.collegeId,
             phone: data.phone,
-            collegeName: college?.name || '',
-            status: 'active',
-            createdAt: new Date().toISOString().split('T')[0],
+            collegeName: college?.name || "",
+            status: "active",
+            createdAt: new Date().toISOString().split("T")[0],
           };
-          setAdmins(prev => [...prev, newAdmin]);
-          toast({
-            title: "Admin Created",
-            description: "New admin has been created successfully.",
-          });
+          setAdmins((prev) => [...prev, newAdmin]);
+
+          toast.success("New admin has been created successfully.");
         }
       }
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to save admin. Please try again.",
-        variant: "destructive",
-      });
-    }
-    
-    form.reset();
-    setIsDialogOpen(false);
-    setEditingAdmin(null);
-  };
+      toast.error("Failed to save admin. Please try again.");
 
+      form.reset();
+      setIsDialogOpen(false);
+      setEditingAdmin(null);
+    }
+  };
   const handleEdit = (admin: Admin) => {
     setEditingAdmin(admin);
     form.reset({
       name: admin.name,
       email: admin.email,
       collegeId: admin.collegeId,
-      phone: admin.phone || '',
+      phone: admin.phone || "",
     });
     setIsDialogOpen(true);
   };
@@ -184,23 +212,15 @@ const AdminManagement = () => {
   const handleDelete = async (adminId: string) => {
     try {
       const response = await fetch(`/api/admins/${adminId}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
-      
+
       if (response.ok) {
-        setAdmins(prev => prev.filter(admin => admin.id !== adminId));
-        toast({
-          title: "Admin Removed",
-          description: "Admin has been removed from the system.",
-          variant: "destructive",
-        });
+        setAdmins((prev) => prev.filter((admin) => admin.id !== adminId));
+        toast.error("Admin has been removed from the system.");
       }
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to delete admin. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Failed to delete admin. Please try again.");
     }
   };
 
@@ -210,21 +230,33 @@ const AdminManagement = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Admin Management</h1>
-          <p className="text-muted-foreground">Manage college administrators and their permissions</p>
+          <p className="text-muted-foreground">
+            Manage college administrators and their permissions
+          </p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => { setEditingAdmin(null); form.reset(); }}>
+            <Button
+              onClick={() => {
+                setEditingAdmin(null);
+                form.reset();
+              }}
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Admin
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>{editingAdmin ? 'Edit Admin' : 'Create New Admin'}</DialogTitle>
+              <DialogTitle>
+                {editingAdmin ? "Edit Admin" : "Create New Admin"}
+              </DialogTitle>
             </DialogHeader>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
                 <FormField
                   control={form.control}
                   name="name"
@@ -232,13 +264,16 @@ const AdminManagement = () => {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter admin's full name" {...field} />
+                        <Input
+                          placeholder="Enter admin's full name"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="email"
@@ -246,20 +281,27 @@ const AdminManagement = () => {
                     <FormItem>
                       <FormLabel>Email Address</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="admin@college.edu" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="admin@college.edu"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="collegeId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>College/Institution</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a college" />
@@ -277,7 +319,7 @@ const AdminManagement = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="phone"
@@ -291,7 +333,7 @@ const AdminManagement = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <div className="flex justify-end space-x-2">
                   <Button
                     type="button"
@@ -301,7 +343,7 @@ const AdminManagement = () => {
                     Cancel
                   </Button>
                   <Button type="submit">
-                    {editingAdmin ? 'Update Admin' : 'Create Admin'}
+                    {editingAdmin ? "Update Admin" : "Create Admin"}
                   </Button>
                 </div>
               </form>
@@ -316,40 +358,51 @@ const AdminManagement = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Admins</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Admins
+                </p>
                 <p className="text-2xl font-bold">{admins.length}</p>
               </div>
               <Building2 className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Active Admins</p>
-                <p className="text-2xl font-bold">{admins.filter(a => a.status === 'active').length}</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Active Admins
+                </p>
+                <p className="text-2xl font-bold">
+                  {admins.filter((a) => a.status === "active").length}
+                </p>
               </div>
-              <Badge variant="default" className="h-8 w-8 rounded-full p-0 flex items-center justify-center">
+              <Badge
+                variant="default"
+                className="h-8 w-8 rounded-full p-0 flex items-center justify-center"
+              >
                 ✓
               </Badge>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Colleges</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Colleges
+                </p>
                 <p className="text-2xl font-bold">{mockColleges.length}</p>
               </div>
               <Building2 className="h-8 w-8 text-secondary" />
             </div>
           </CardContent>
         </Card>
-        
+
         <div className="relative">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
@@ -386,12 +439,17 @@ const AdminManagement = () => {
                       <Avatar>
                         <AvatarImage src={admin.avatar} />
                         <AvatarFallback>
-                          {admin.name.split(' ').map(n => n[0]).join('')}
+                          {admin.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-medium">{admin.name}</p>
-                        <p className="text-sm text-muted-foreground">{admin.email}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {admin.email}
+                        </p>
                       </div>
                     </div>
                   </TableCell>
@@ -416,13 +474,17 @@ const AdminManagement = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={admin.status === 'active' ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={
+                        admin.status === "active" ? "default" : "secondary"
+                      }
+                    >
                       {admin.status}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <span className="text-sm text-muted-foreground">
-                      {admin.lastLogin || 'Never'}
+                      {admin.lastLogin || "Never"}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">

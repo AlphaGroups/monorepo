@@ -43,7 +43,7 @@ export default function LoginPage() {
     if (user) {
       // Redirect based on user role
       switch (user.role) {
-        case "super_admin":
+        case "superadmin":
           router.replace("/admin/dashboard");
           break;
         case "admin":

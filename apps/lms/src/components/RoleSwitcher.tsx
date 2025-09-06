@@ -10,7 +10,7 @@ const roleConfig: Record<UserRole, {
   color: string;
   description: string;
 }> = {
-  super_admin: {
+  superadmin: {
     label: 'Super Admin',
     icon: Crown,
     color: 'bg-gradient-primary text-primary-foreground',
@@ -61,7 +61,7 @@ const RoleSwitcher = ({ className, isCollapsed }: RoleSwitcherProps) => {
   const handleRoleChange = (newRole: UserRole) => {
     // Mock role switching for demo
     const mockUsers: Record<UserRole, { id: string; name: string; email: string; role: UserRole }> = {
-      super_admin: { id: '1', name: 'Super Admin', email: 'super@admin.com', role: 'super_admin' },
+      superadmin: { id: '1', name: 'Super Admin', email: 'super@admin.com', role: 'superadmin' },
       admin: { id: '2', name: 'College Admin', email: 'admin@college.edu', role: 'admin' },
       class_user: { id: '3', name: 'Teacher Smith', email: 'teacher@college.edu', role: 'class_user' },
       teacher: { id: '3', name: 'Teacher Smith', email: 'teacher@college.edu', role: 'teacher' },

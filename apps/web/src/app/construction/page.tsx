@@ -18,8 +18,8 @@ import {
   Clock,
   Award,
 } from "lucide-react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/LayoutParts/Header";
+import Footer from "@/components/LayoutParts/Footer";
 
 const Construction = () => {
   const services = [

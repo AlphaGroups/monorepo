@@ -28,7 +28,7 @@ interface HeaderProps {
 }
 
 const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => {
-  const { user, logout } = useAuth();
+  const { userProfile, logout } = useAuth();
 
   const getInitials = (name: string) => {
     return name
@@ -90,9 +90,9 @@ const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => 
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={user?.avatar} alt={user?.name} />
+                  {/* <AvatarImage src={userProfile?.avatar} alt={userProfile?.name} /> */}
                   <AvatarFallback className="bg-gradient-primary text-primary-foreground">
-                    {user?.name ? getInitials(user.name) : 'U'}
+                    {userProfile?.name ? getInitials(userProfile.name) : 'U'}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -100,12 +100,12 @@ const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => 
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user?.name}</p>
+                  <p className="text-sm font-medium leading-none">{userProfile?.name}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {user?.email}
+                    {userProfile?.email}
                   </p>
                   <Badge variant="secondary" className="w-fit text-xs mt-1">
-                    {user?.role.replace('_', ' ').toUpperCase()}
+                    {userProfile?.role.replace('_', ' ').toUpperCase()}
                   </Badge>
                 </div>
               </DropdownMenuLabel>

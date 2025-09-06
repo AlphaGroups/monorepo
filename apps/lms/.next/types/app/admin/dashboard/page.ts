@@ -1,4 +1,4 @@
-// File: C:\Users\ADMIN\Desktop\ui\personal\demo\monorepo\apps\lms\src\app\admin\dashboard\page.tsx
+// File: C:\Users\vishal\desktop\final\monorepo\apps\lms\src\app\admin\dashboard\page.tsx
 import * as entry from '../../../../../src/app/admin/dashboard/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

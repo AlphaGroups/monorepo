@@ -13,7 +13,7 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { user } = useAuth();
+  const { userProfile } = useAuth();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -24,7 +24,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   };
 
   // If user is not logged in, just render children (e.g., login page)
-  if (!user) {
+  if (!userProfile) {
     return <>{children}</>;
   }
 

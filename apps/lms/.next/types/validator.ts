@@ -48,6 +48,48 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   handler satisfies AppPageConfig<"/admin/dashboard">
 }
 
+// Validate ../../src/app/admin/users/AdminManagement/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/admin/users/AdminManagement/page.js")
+  handler satisfies AppPageConfig<"/admin/users/AdminManagement">
+}
+
+// Validate ../../src/app/admin/users/StudentManagement/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/admin/users/StudentManagement/page.js")
+  handler satisfies AppPageConfig<"/admin/users/StudentManagement">
+}
+
+// Validate ../../src/app/admin/users/TeachersManagement/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/admin/users/TeachersManagement/page.js")
+  handler satisfies AppPageConfig<"/admin/users/TeachersManagement">
+}
+
+// Validate ../../src/app/dashboards/admin/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/dashboards/admin/page.js")
+  handler satisfies AppPageConfig<"/dashboards/admin">
+}
+
+// Validate ../../src/app/dashboards/student/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/dashboards/student/page.js")
+  handler satisfies AppPageConfig<"/dashboards/student">
+}
+
+// Validate ../../src/app/dashboards/superadmin/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/dashboards/superadmin/page.js")
+  handler satisfies AppPageConfig<"/dashboards/superadmin">
+}
+
+// Validate ../../src/app/dashboards/teacher/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/dashboards/teacher/page.js")
+  handler satisfies AppPageConfig<"/dashboards/teacher">
+}
+
 // Validate ../../src/app/dmeo/page.tsx
 {
   const handler = {} as typeof import("../../src/app/dmeo/page.js")
@@ -88,6 +130,12 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
 {
   const handler = {} as typeof import("../../src/app/admin/layout.js")
   handler satisfies LayoutConfig<"/admin">
+}
+
+// Validate ../../src/app/dashboards/layout.tsx
+{
+  const handler = {} as typeof import("../../src/app/dashboards/layout.js")
+  handler satisfies LayoutConfig<"/dashboards">
 }
 
 // Validate ../../src/app/layout.tsx

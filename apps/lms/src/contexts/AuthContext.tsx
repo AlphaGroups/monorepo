@@ -1,20 +1,13 @@
-"use client"
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+"use client";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { AuthService } from "@/services/auth.service";
+import { UserProfile } from "@/services/interfaces";
+import { useRouter } from "next/navigation";
 
-export type UserRole = 'super_admin' | 'admin' | 'class_user' | 'student' |"teacher";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  avatar?: string;
-  collegeId?: string;
-  classIds?: string[];
-}
+export type UserRole = "superadmin" | "admin" | "class_user" | "student" | "teacher";
 
 interface AuthContextType {
-  user: User | null;
+  userProfile: UserProfile | null;
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -23,102 +16,83 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Mock authentication for demo purposes
-const mockUsers: Record<string, User & { password: string }> = {
-  'superadmin@edu.com': {
-    id: '1',
-    name: 'John Doe',
-    email: 'superadmin@edu.com',
-    role: 'super_admin',
-    password: 'admin123'
-  },
-  'admin@college.edu': {
-    id: '2',
-    name: 'Jane Smith',
-    email: 'admin@college.edu',
-    role: 'admin',
-    password: 'admin123',
-    collegeId: 'college-1'
-  },
-  'teacher@college.edu': {
-    id: '3',
-    name: 'Mike Johnson',
-    email: 'teacher@college.edu',
-    role: 'class_user',
-    password: 'teacher123',
-    collegeId: 'college-1',
-    classIds: ['class-1', 'class-2']
-  },
-  'student@college.edu': {
-    id: '4',
-    name: 'Alice Wilson',
-    email: 'student@college.edu',
-    role: 'student',
-    password: 'student123',
-    classIds: ['class-1', 'class-2', 'class-3']
-  }
-};
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Check for existing session on app load
-    const savedToken = localStorage.getItem('auth-token');
-    const savedUser = localStorage.getItem('auth-user');
-    
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
-    }
-    
-    setIsLoading(false);
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const mockUser = mockUsers[email];
-    
-    if (!mockUser || mockUser.password !== password) {
-      setIsLoading(false);
-      throw new Error('Invalid credentials');
-    }
-    
-    const { password: _, ...userWithoutPassword } = mockUser;
-    const mockToken = `mock-jwt-token-${mockUser.id}`;
-    
-    setUser(userWithoutPassword);
-    setToken(mockToken);
-    
-    localStorage.setItem('auth-token', mockToken);
-    localStorage.setItem('auth-user', JSON.stringify(userWithoutPassword));
-    
-    setIsLoading(false);
+  // Role → dashboard mapping
+  const roleDashboards: Record<UserRole, string> = {
+    superadmin: "/dashboards/superadmin",
+    admin: "/dashboards/admin",
+    class_user: "/dashboard/teacher",
+    teacher: "/dashboard/teacher",
+    student: "/dashboards/student",
   };
 
+  // Hydrate user from localStorage on mount
+  useEffect(() => {
+    const savedToken = localStorage.getItem("accessToken");
+    const savedUser = localStorage.getItem("auth-userProfile");
+
+    if (savedToken) {
+      setToken(savedToken);
+
+      if (savedUser) {
+        setUserProfile(JSON.parse(savedUser));
+        setIsLoading(false);
+      } else {
+        AuthService.getProfile()
+          .then((profile) => {
+            setUserProfile(profile);
+            localStorage.setItem("auth-userProfile", JSON.stringify(profile));
+          })
+          .catch(() => logout())
+          .finally(() => setIsLoading(false));
+      }
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Login function
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      // Login API
+      const { access_token } = await AuthService.login({ email, password });
+      localStorage.setItem("accessToken", access_token);
+      setToken(access_token);
+
+      // Fetch profile
+      const profile = await AuthService.getProfile();
+      setUserProfile(profile);
+      localStorage.setItem("auth-userProfile", JSON.stringify(profile));
+
+      // Role-based redirection
+      const dashboard = roleDashboards[profile.role] || "/dashboard";
+      router.push(dashboard);
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Logout function
   const logout = () => {
-    setUser(null);
+    setUserProfile(null);
     setToken(null);
-    localStorage.removeItem('auth-token');
-    localStorage.removeItem('auth-user');
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("tokenType");
+    localStorage.removeItem("auth-userProfile");
+    router.push("/login");
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        login,
-        logout,
-        isLoading
-      }}
-    >
+    <AuthContext.Provider value={{ userProfile, token, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
@@ -126,8 +100,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 };
