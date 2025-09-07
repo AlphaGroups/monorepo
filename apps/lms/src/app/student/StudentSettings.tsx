@@ -26,7 +26,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 
 const StudentSettings = () => {
-  const { user } = useAuth();
+  const { userProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [notifications, setNotifications] = useState({
     emailNotifications: true,
@@ -38,8 +38,8 @@ const StudentSettings = () => {
   });
 
   const [profile, setProfile] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
+    name: userProfile?.name || '',
+    email: userProfile?.email || '',
     phone: '',
     bio: '',
     timezone: 'UTC-5',
@@ -96,9 +96,9 @@ const StudentSettings = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <Avatar className="h-20 w-20">
-                    <AvatarImage src={user?.avatar} />
+                    {/* <AvatarImage src={userProfile?.avatar} /> */}
                     <AvatarFallback className="text-lg">
-                      {user?.name?.split(' ').map(n => n[0]).join('')}
+                      {userProfile?.name?.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   <div>

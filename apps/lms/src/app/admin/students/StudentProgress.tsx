@@ -1,14 +1,55 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
-import { Search, TrendingUp, TrendingDown, Clock, Award, BookOpen, Video, FileText } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import {
+  Search,
+  TrendingUp,
+  TrendingDown,
+  Clock,
+  Award,
+  BookOpen,
+  Video,
+  FileText,
+} from "lucide-react";
 
 interface StudentProgress {
   id: string;
@@ -21,7 +62,7 @@ interface StudentProgress {
   averageScore: number;
   timeSpent: number; // in hours
   lastActivity: string;
-  status: 'excellent' | 'good' | 'needs_attention' | 'at_risk';
+  status: "excellent" | "good" | "needs_attention" | "at_risk";
   subjects: {
     name: string;
     progress: number;
@@ -31,113 +72,116 @@ interface StudentProgress {
 
 const mockStudentProgress: StudentProgress[] = [
   {
-    id: '1',
-    name: 'Alice Johnson',
-    email: 'alice.johnson@example.com',
+    id: "1",
+    name: "Alice Johnson",
+    email: "alice.johnson@example.com",
     overallProgress: 85,
     videosWatched: 45,
     testsCompleted: 12,
     averageScore: 92,
     timeSpent: 120,
-    lastActivity: '2024-01-20',
-    status: 'excellent',
+    lastActivity: "2024-01-20",
+    status: "excellent",
     subjects: [
-      { name: 'Mathematics', progress: 90, score: 95 },
-      { name: 'Physics', progress: 80, score: 88 },
-      { name: 'Chemistry', progress: 85, score: 92 }
-    ]
+      { name: "Mathematics", progress: 90, score: 95 },
+      { name: "Physics", progress: 80, score: 88 },
+      { name: "Chemistry", progress: 85, score: 92 },
+    ],
   },
   {
-    id: '2',
-    name: 'Bob Smith',
-    email: 'bob.smith@example.com',
+    id: "2",
+    name: "Bob Smith",
+    email: "bob.smith@example.com",
     overallProgress: 65,
     videosWatched: 32,
     testsCompleted: 8,
     averageScore: 78,
     timeSpent: 89,
-    lastActivity: '2024-01-19',
-    status: 'good',
+    lastActivity: "2024-01-19",
+    status: "good",
     subjects: [
-      { name: 'Mathematics', progress: 70, score: 82 },
-      { name: 'Physics', progress: 60, score: 75 },
-      { name: 'Chemistry', progress: 65, score: 77 }
-    ]
+      { name: "Mathematics", progress: 70, score: 82 },
+      { name: "Physics", progress: 60, score: 75 },
+      { name: "Chemistry", progress: 65, score: 77 },
+    ],
   },
   {
-    id: '3',
-    name: 'Carol Davis',
-    email: 'carol.davis@example.com',
+    id: "3",
+    name: "Carol Davis",
+    email: "carol.davis@example.com",
     overallProgress: 45,
     videosWatched: 18,
     testsCompleted: 4,
     averageScore: 65,
     timeSpent: 45,
-    lastActivity: '2024-01-15',
-    status: 'needs_attention',
+    lastActivity: "2024-01-15",
+    status: "needs_attention",
     subjects: [
-      { name: 'Mathematics', progress: 50, score: 68 },
-      { name: 'Physics', progress: 40, score: 62 },
-      { name: 'Chemistry', progress: 45, score: 65 }
-    ]
+      { name: "Mathematics", progress: 50, score: 68 },
+      { name: "Physics", progress: 40, score: 62 },
+      { name: "Chemistry", progress: 45, score: 65 },
+    ],
   },
   {
-    id: '4',
-    name: 'David Wilson',
-    email: 'david.wilson@example.com',
+    id: "4",
+    name: "David Wilson",
+    email: "david.wilson@example.com",
     overallProgress: 25,
     videosWatched: 8,
     testsCompleted: 2,
     averageScore: 45,
     timeSpent: 20,
-    lastActivity: '2024-01-10',
-    status: 'at_risk',
+    lastActivity: "2024-01-10",
+    status: "at_risk",
     subjects: [
-      { name: 'Mathematics', progress: 30, score: 50 },
-      { name: 'Physics', progress: 20, score: 40 },
-      { name: 'Chemistry', progress: 25, score: 45 }
-    ]
-  }
+      { name: "Mathematics", progress: 30, score: 50 },
+      { name: "Physics", progress: 20, score: 40 },
+      { name: "Chemistry", progress: 25, score: 45 },
+    ],
+  },
 ];
 
 const progressChartData = [
-  { month: 'Sep', progress: 20 },
-  { month: 'Oct', progress: 35 },
-  { month: 'Nov', progress: 55 },
-  { month: 'Dec', progress: 70 },
-  { month: 'Jan', progress: 85 }
+  { month: "Sep", progress: 20 },
+  { month: "Oct", progress: 35 },
+  { month: "Nov", progress: 55 },
+  { month: "Dec", progress: 70 },
+  { month: "Jan", progress: 85 },
 ];
 
 const statusData = [
-  { name: 'Excellent', value: 25, color: '#22c55e' },
-  { name: 'Good', value: 45, color: '#3b82f6' },
-  { name: 'Needs Attention', value: 20, color: '#f59e0b' },
-  { name: 'At Risk', value: 10, color: '#ef4444' }
+  { name: "Excellent", value: 25, color: "#22c55e" },
+  { name: "Good", value: 45, color: "#3b82f6" },
+  { name: "Needs Attention", value: 20, color: "#f59e0b" },
+  { name: "At Risk", value: 10, color: "#ef4444" },
 ];
 
 const StudentProgress = () => {
   const [students] = useState<StudentProgress[]>(mockStudentProgress);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [selectedStudent, setSelectedStudent] = useState<StudentProgress | null>(students[0]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [selectedStudent, setSelectedStudent] =
+    useState<StudentProgress | null>(students[0]);
 
-  const filteredStudents = students.filter(student => {
-    const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         student.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || student.status === statusFilter;
-    
+  const filteredStudents = students.filter((student) => {
+    const matchesSearch =
+      student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || student.status === statusFilter;
+
     return matchesSearch && matchesStatus;
   });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'excellent':
+      case "excellent":
         return <Badge className="bg-green-500">Excellent</Badge>;
-      case 'good':
+      case "good":
         return <Badge className="bg-blue-500">Good</Badge>;
-      case 'needs_attention':
+      case "needs_attention":
         return <Badge className="bg-yellow-500">Needs Attention</Badge>;
-      case 'at_risk':
+      case "at_risk":
         return <Badge variant="destructive">At Risk</Badge>;
       default:
         return <Badge>{status}</Badge>;
@@ -146,13 +190,13 @@ const StudentProgress = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'excellent':
+      case "excellent":
         return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'good':
+      case "good":
         return <TrendingUp className="h-4 w-4 text-blue-500" />;
-      case 'needs_attention':
+      case "needs_attention":
         return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'at_risk':
+      case "at_risk":
         return <TrendingDown className="h-4 w-4 text-red-500" />;
       default:
         return null;
@@ -163,7 +207,9 @@ const StudentProgress = () => {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Student Progress Analytics</h1>
-        <p className="text-muted-foreground">Monitor and analyze student learning progress</p>
+        <p className="text-muted-foreground">
+          Monitor and analyze student learning progress
+        </p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
@@ -179,7 +225,9 @@ const StudentProgress = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Students</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Total Students
+                    </p>
                     <p className="text-2xl font-bold">{students.length}</p>
                   </div>
                   <BookOpen className="h-8 w-8 text-muted-foreground" />
@@ -191,9 +239,17 @@ const StudentProgress = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Avg Progress</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Avg Progress
+                    </p>
                     <p className="text-2xl font-bold">
-                      {Math.round(students.reduce((acc, s) => acc + s.overallProgress, 0) / students.length)}%
+                      {Math.round(
+                        students.reduce(
+                          (acc, s) => acc + s.overallProgress,
+                          0
+                        ) / students.length
+                      )}
+                      %
                     </p>
                   </div>
                   <TrendingUp className="h-8 w-8 text-green-500" />
@@ -205,9 +261,15 @@ const StudentProgress = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Avg Score</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Avg Score
+                    </p>
                     <p className="text-2xl font-bold">
-                      {Math.round(students.reduce((acc, s) => acc + s.averageScore, 0) / students.length)}%
+                      {Math.round(
+                        students.reduce((acc, s) => acc + s.averageScore, 0) /
+                          students.length
+                      )}
+                      %
                     </p>
                   </div>
                   <Award className="h-8 w-8 text-yellow-500" />
@@ -219,9 +281,11 @@ const StudentProgress = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">At Risk</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      At Risk
+                    </p>
                     <p className="text-2xl font-bold text-red-500">
-                      {students.filter(s => s.status === 'at_risk').length}
+                      {students.filter((s) => s.status === "at_risk").length}
                     </p>
                   </div>
                   <TrendingDown className="h-8 w-8 text-red-500" />
@@ -256,7 +320,9 @@ const StudentProgress = () => {
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="excellent">Excellent</SelectItem>
                     <SelectItem value="good">Good</SelectItem>
-                    <SelectItem value="needs_attention">Needs Attention</SelectItem>
+                    <SelectItem value="needs_attention">
+                      Needs Attention
+                    </SelectItem>
                     <SelectItem value="at_risk">At Risk</SelectItem>
                   </SelectContent>
                 </Select>
@@ -276,7 +342,7 @@ const StudentProgress = () => {
                   </TableHeader>
                   <TableBody>
                     {filteredStudents.map((student) => (
-                      <TableRow 
+                      <TableRow
                         key={student.id}
                         className="cursor-pointer hover:bg-muted/50"
                         onClick={() => setSelectedStudent(student)}
@@ -285,22 +351,36 @@ const StudentProgress = () => {
                           <div className="flex items-center space-x-3">
                             <Avatar className="h-8 w-8">
                               <AvatarImage src={student.avatar} />
-                              <AvatarFallback>{student.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                              <AvatarFallback>
+                                {student.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
                             </Avatar>
                             <div>
                               <div className="font-medium">{student.name}</div>
-                              <div className="text-sm text-muted-foreground">{student.email}</div>
+                              <div className="text-sm text-muted-foreground">
+                                {student.email}
+                              </div>
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
-                            <Progress value={student.overallProgress} className="w-[100px]" />
-                            <span className="text-sm font-medium">{student.overallProgress}%</span>
+                            <Progress
+                              value={student.overallProgress}
+                              className="w-[100px]"
+                            />
+                            <span className="text-sm font-medium">
+                              {student.overallProgress}%
+                            </span>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <span className="font-medium">{student.averageScore}%</span>
+                          <span className="font-medium">
+                            {student.averageScore}%
+                          </span>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-4 text-sm text-muted-foreground">
@@ -345,12 +425,19 @@ const StudentProgress = () => {
                     <Avatar className="h-16 w-16">
                       <AvatarImage src={selectedStudent.avatar} />
                       <AvatarFallback className="text-lg">
-                        {selectedStudent.name.split(' ').map(n => n[0]).join('')}
+                        {selectedStudent.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <CardTitle className="text-2xl">{selectedStudent.name}</CardTitle>
-                      <CardDescription className="text-lg">{selectedStudent.email}</CardDescription>
+                      <CardTitle className="text-2xl">
+                        {selectedStudent.name}
+                      </CardTitle>
+                      <CardDescription className="text-lg">
+                        {selectedStudent.email}
+                      </CardDescription>
                     </div>
                     <div className="ml-auto">
                       {getStatusBadge(selectedStudent.status)}
@@ -360,20 +447,36 @@ const StudentProgress = () => {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-primary">{selectedStudent.overallProgress}%</div>
-                      <div className="text-sm text-muted-foreground">Overall Progress</div>
+                      <div className="text-2xl font-bold text-primary">
+                        {selectedStudent.overallProgress}%
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Overall Progress
+                      </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-green-500">{selectedStudent.averageScore}%</div>
-                      <div className="text-sm text-muted-foreground">Average Score</div>
+                      <div className="text-2xl font-bold text-green-500">
+                        {selectedStudent.averageScore}%
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Average Score
+                      </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-500">{selectedStudent.timeSpent}h</div>
-                      <div className="text-sm text-muted-foreground">Time Spent</div>
+                      <div className="text-2xl font-bold text-blue-500">
+                        {selectedStudent.timeSpent}h
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Time Spent
+                      </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-purple-500">{selectedStudent.videosWatched}</div>
-                      <div className="text-sm text-muted-foreground">Videos Watched</div>
+                      <div className="text-2xl font-bold text-purple-500">
+                        {selectedStudent.videosWatched}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Videos Watched
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -382,7 +485,9 @@ const StudentProgress = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Subject Progress</CardTitle>
-                  <CardDescription>Progress breakdown by subject</CardDescription>
+                  <CardDescription>
+                    Progress breakdown by subject
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -419,7 +524,12 @@ const StudentProgress = () => {
                     <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="progress" stroke="#3b82f6" strokeWidth={2} />
+                    <Line
+                      type="monotone"
+                      dataKey="progress"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -428,12 +538,14 @@ const StudentProgress = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Student Status Distribution</CardTitle>
-                <CardDescription>Breakdown of student performance levels</CardDescription>
+                <CardDescription>
+                  Breakdown of student performance levels
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
-                    <Pie
+                    {/* <Pie
                       data={statusData}
                       cx="50%"
                       cy="50%"
@@ -446,7 +558,32 @@ const StudentProgress = () => {
                       {statusData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
+                    </Pie> */}
+                    <Pie
+                      data={statusData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({
+                        name,
+                        percent,
+                      }: {
+                        name?: string;
+                        percent?: number;
+                      }) =>
+                        `${name ?? ""} ${
+                          percent !== undefined ? (percent * 100).toFixed(0) : 0
+                        }%`
+                      }
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {statusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
                     </Pie>
+
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
@@ -457,17 +594,21 @@ const StudentProgress = () => {
           <Card>
             <CardHeader>
               <CardTitle>Performance by Subject</CardTitle>
-              <CardDescription>Average scores across different subjects</CardDescription>
+              <CardDescription>
+                Average scores across different subjects
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={[
-                  { subject: 'Mathematics', score: 85 },
-                  { subject: 'Physics', score: 78 },
-                  { subject: 'Chemistry', score: 82 },
-                  { subject: 'Biology', score: 88 },
-                  { subject: 'Computer Science', score: 91 }
-                ]}>
+                <BarChart
+                  data={[
+                    { subject: "Mathematics", score: 85 },
+                    { subject: "Physics", score: 78 },
+                    { subject: "Chemistry", score: 82 },
+                    { subject: "Biology", score: 88 },
+                    { subject: "Computer Science", score: 91 },
+                  ]}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="subject" />
                   <YAxis />

@@ -48,12 +48,12 @@ interface RoleSwitcherProps {
 }
 
 const RoleSwitcher = ({ className, isCollapsed }: RoleSwitcherProps) => {
-  const { user } = useAuth();
+  const { userProfile } = useAuth();
 
-  if (!user) return null;
+  if (!userProfile) return null;
 
   // const currentRoleConfig = roleConfig[user.role];
-  const currentRoleConfig = roleConfig[user.role as UserRole];
+  const currentRoleConfig = roleConfig[userProfile.role as UserRole];
 
   const Icon = currentRoleConfig.icon;
 
@@ -95,7 +95,7 @@ const RoleSwitcher = ({ className, isCollapsed }: RoleSwitcherProps) => {
           <span className="text-sm font-medium text-sidebar-foreground">Role (Demo)</span>
         </div>
 
-        <Select value={user.role} onValueChange={handleRoleChange}>
+        <Select value={userProfile.role} onValueChange={handleRoleChange}>
           <SelectTrigger className="w-full">
             <SelectValue>
               <div className="flex items-center space-x-2">

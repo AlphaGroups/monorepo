@@ -36,13 +36,13 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
 
-  const { login, isLoading, user } = useAuth();
+  const { login, isLoading, userProfile } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (userProfile) {
       // Redirect based on user role
-      switch (user.role) {
+      switch (userProfile.role) {
         case "superadmin":
           router.replace("/admin/dashboard");
           break;
@@ -59,7 +59,7 @@ export default function LoginPage() {
           router.replace("/");
       }
     }
-  }, [user, router]);
+  }, [userProfile, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
