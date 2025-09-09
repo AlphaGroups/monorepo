@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 
+const LMS_URL = process.env.NEXT_PUBLIC_LMS_URL;
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -45,10 +47,11 @@ const Header = () => {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${isActive(item.href)
-                  ? "text-primary border-b-2 border-primary"
-                  : "text-muted-foreground"
-                  }`}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive(item.href)
+                    ? "text-primary border-b-2 border-primary"
+                    : "text-muted-foreground"
+                }`}
               >
                 {item.name}
               </Link>
@@ -58,22 +61,27 @@ const Header = () => {
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center space-x-4">
             <Link href="/login">
-              <Button size="sm" className="bg-blue-500 text-white hover:bg-blue-600">
+              <Button
+                size="sm"
+                className="bg-blue-500 text-white hover:bg-blue-600"
+              >
                 Login
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="sm" className="bg-blue-500 text-white hover:bg-blue-600">
+              <Button
+                size="sm"
+                className="bg-blue-500 text-white hover:bg-blue-600"
+              >
                 Register
               </Button>
             </Link>
 
-            <Link href="/lms/login">
+            <Link href={`${LMS_URL}/login`} target="_blank">
               <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
                 LMS Login
               </Button>
             </Link>
-
           </div>
 
           {/* Mobile Menu Button */}
@@ -83,7 +91,11 @@ const Header = () => {
             className="lg:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
         </div>
 
@@ -94,10 +106,11 @@ const Header = () => {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${isActive(item.href)
-                  ? "text-primary bg-primary-light"
-                  : "text-muted-foreground hover:text-primary hover:bg-muted"
-                  }`}
+                className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  isActive(item.href)
+                    ? "text-primary bg-primary-light"
+                    : "text-muted-foreground hover:text-primary hover:bg-muted"
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
@@ -115,8 +128,10 @@ const Header = () => {
                 </Button>
               </Link>
 
-              <Link href="/lms/login">
-                <Button variant="outline">lms Login</Button>
+              <Link href={`${LMS_URL}/login`} target="_blank">
+                <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
+                  LMS Login
+                </Button>
               </Link>
             </div>
           </div>

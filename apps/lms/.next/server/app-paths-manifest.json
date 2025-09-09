@@ -1,20 +1,5 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/NotFound/page": "app/NotFound/page.js",
-  "/content/VideoLibrary/page": "app/content/VideoLibrary/page.js",
-  "/login/page": "app/login/page.js",
-  "/stem-labs/page": "app/stem-labs/page.js",
-  "/page": "app/page.js",
-  "/student/dashboard/page": "app/student/dashboard/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/classes/ClassList/page": "app/admin/classes/ClassList/page.js",
-  "/admin/classes/ClassCreate/page": "app/admin/classes/ClassCreate/page.js",
-  "/admin/users/StudentManagement/page": "app/admin/users/StudentManagement/page.js",
-  "/admin/users/AdminManagement/page": "app/admin/users/AdminManagement/page.js",
-  "/dashboards/admin/page": "app/dashboards/admin/page.js",
-  "/dashboards/student/page": "app/dashboards/student/page.js",
-  "/dashboards/superadmin/page": "app/dashboards/superadmin/page.js",
-  "/dashboards/teacher/page": "app/dashboards/teacher/page.js",
-  "/admin/users/TeachersManagement/page": "app/admin/users/TeachersManagement/page.js"
+  "/login/page": "app/login/page.js"
 }
