@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 
-const LMS_URL = process.env.NEXT_PUBLIC_LMS_URL;
+const LMS_URL = process.env.NEXT_PUBLIC_LMS_URL || "/lms" ;
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
