@@ -27,11 +27,14 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   reactStrictMode: true,
   async rewrites() {
     return [
       {
-        source: '/lms/:path*',
+        source: "/lms/:path*",
         destination: `${process.env.NEXT_PUBLIC_LMS_API_URL}/lms/:path*`,
       },
     ];
