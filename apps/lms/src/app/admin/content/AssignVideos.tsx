@@ -13,6 +13,8 @@ import { Search, Users, Calendar, Play, Clock, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 
+
+
 interface VideoContent {
   id: string;
   title: string;

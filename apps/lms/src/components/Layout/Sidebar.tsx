@@ -218,7 +218,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth, UserRole } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
@@ -250,10 +250,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { UserRole } from "@/services/interfaces";
 
 interface SidebarProps {
   className?: string;
   isCollapsed?: boolean;
+  userRole?: UserRole; // ✅ add this
 }
 
 interface NavigationItem {

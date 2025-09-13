@@ -1,8 +1,10 @@
 import React from 'react';
-import { useAuth, UserRole } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Shield, Crown, UserCheck, GraduationCap } from 'lucide-react';
+
+import {UserRole} from "@/services/interfaces";
 
 const roleConfig: Record<UserRole, {
   label: string;
