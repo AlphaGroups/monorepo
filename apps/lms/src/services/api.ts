@@ -22,7 +22,7 @@ api.interceptors.response.use(
   async (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem("accessToken");
-      window.location.href = "/login"; // redirect to login
+      window.location.href = "/lms/login"; // redirect to login
     }
     return Promise.reject(err);
   }
