@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Target, Heart, Lightbulb, Shield, Globe, Handshake } from 'lucide-react';
 
+
 const About: React.FC = () => {
   const values = [
     {
