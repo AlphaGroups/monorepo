@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -345,13 +344,13 @@ const Sidebar = ({ className, isCollapsed = false }: SidebarProps) => {
           open={isGroupOpen}
           onOpenChange={() => toggleGroup(item.title)}
         >
-          <CollapsibleTrigger asChild>
+          {/* <CollapsibleTrigger asChild>
             <Button
               variant={hasActiveChildItem ? "secondary" : "ghost"}
               className="w-full justify-start px-3"
               size="sm"
             >
-              <item.icon className="mr-3 h-4 w-4" />
+         
               {!isCollapsed && (
                 <>
                   <span className="flex-1 text-left">{item.title}</span>
@@ -368,7 +367,7 @@ const Sidebar = ({ className, isCollapsed = false }: SidebarProps) => {
                 </>
               )}
             </Button>
-          </CollapsibleTrigger>
+          </CollapsibleTrigger> */}
           {!isCollapsed && (
             <CollapsibleContent className="space-y-1 px-3">
               {item.children?.map((child, index) => {
