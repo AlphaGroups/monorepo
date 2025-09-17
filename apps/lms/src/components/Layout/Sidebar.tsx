@@ -70,9 +70,9 @@ const Sidebar = ({ className, isCollapsed = false }: SidebarProps) => {
             href: "/admin/users",
             icon: Users,
             children: [
-              { title: "Admins", href: "/admin/users/admins", icon: UserCog },
-              { title: "Class Users", href: "/admin/users/class-users", icon: UserCheck },
-              { title: "Students", href: "/admin/users/students", icon: GraduationCap }
+              { title: "Admins", href: "/admin/users/AdminManagement", icon: UserCog },
+              { title: "Class Users", href: "/admin/users/TeachersManagement", icon: UserCheck },
+              { title: "Students", href: "/admin/users/StudentManagement", icon: GraduationCap }
             ]
           },
           {
