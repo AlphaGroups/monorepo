@@ -1,7 +1,7 @@
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import React from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,32 +9,36 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
-  GraduationCap, 
-  Search, 
-  Bell, 
-  Settings, 
-  LogOut, 
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  GraduationCap,
+  Search,
+  Bell,
+  Settings,
+  LogOut,
   User,
-  SidebarOpen
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+  SidebarOpen,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 interface HeaderProps {
   onToggleSidebar?: () => void;
   showSidebarToggle?: boolean;
 }
 
-const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => {
+const Header = ({
+  onToggleSidebar,
+  showSidebarToggle = false,
+}: HeaderProps) => {
   const { userProfile, logout } = useAuth();
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
       .toUpperCase();
   };
 
@@ -52,14 +56,18 @@ const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => 
               <SidebarOpen className="h-5 w-5" />
             </Button>
           )}
-          
+
           <div className="flex items-center space-x-2">
             <div className="p-2 bg-gradient-primary rounded-lg">
               <GraduationCap className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-xl font-heading font-semibold">EduPlatform</h1>
-              <p className="text-xs text-muted-foreground hidden sm:block">Learning Management System</p>
+              <h1 className="text-xl font-heading font-semibold">
+                EduPlatform
+              </h1>
+              <p className="text-xs text-muted-foreground hidden sm:block">
+                Learning Management System
+              </p>
             </div>
           </div>
         </div>
@@ -78,8 +86,8 @@ const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => 
         <div className="flex items-center space-x-3">
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
-            <Badge 
-              variant="destructive" 
+            <Badge
+              variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
             >
               3
@@ -88,11 +96,14 @@ const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => 
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+              <Button
+                variant="ghost"
+                className="relative h-10 w-10 rounded-full"
+              >
                 <Avatar className="h-10 w-10">
                   {/* <AvatarImage src={userProfile?.avatar} alt={userProfile?.name} /> */}
                   <AvatarFallback className="bg-gradient-primary text-primary-foreground">
-                    {userProfile?.name ? getInitials(userProfile.name) : 'U'}
+                    {userProfile?.name ? getInitials(userProfile.name) : "U"}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -100,20 +111,30 @@ const Header = ({ onToggleSidebar, showSidebarToggle = false }: HeaderProps) => 
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{userProfile?.name}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {userProfile?.name}
+                  </p>
                   <p className="text-xs leading-none text-muted-foreground">
                     {userProfile?.email}
                   </p>
                   <Badge variant="secondary" className="w-fit text-xs mt-1">
-                    {userProfile?.role.replace('_', ' ').toUpperCase()}
+                    {userProfile?.role.replace("_", " ").toUpperCase()}
                   </Badge>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+
+                <span href="profile">Profile</span>
+              </DropdownMenuItem> */}
+              <DropdownMenuItem>
+                <Link href="/profile" className="flex items-center">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
               </DropdownMenuItem>
+
               <DropdownMenuItem>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>

@@ -1,10 +1,21 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { AuthService } from "@/services/auth.service";
 import { UserProfile } from "@/services/interfaces";
 import { useRouter } from "next/navigation";
-
-export type UserRole = "superadmin" | "admin" | "class_user" | "student" | "teacher";
+// import { UserRole } from "@/services/interfaces";
+export type UserRole =
+  | "superadmin"
+  | "admin"
+  | "class_user"
+  | "student"
+  | "teacher";
 
 interface AuthContextType {
   userProfile: UserProfile | null;
@@ -92,7 +103,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ userProfile, token, login, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ userProfile, token, login, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );
