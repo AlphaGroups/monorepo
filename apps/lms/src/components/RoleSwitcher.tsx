@@ -24,12 +24,6 @@ const roleConfig: Record<UserRole, {
     color: 'bg-gradient-secondary text-secondary-foreground',
     description: 'College management'
   },
-  class_user: {
-    label: 'Teacher',
-    icon: UserCheck,
-    color: 'bg-gradient-accent text-accent-foreground',
-    description: 'Class management'
-  },
   teacher: {
     label: 'Teacher',
     icon: UserCheck,
@@ -65,7 +59,7 @@ const RoleSwitcher = ({ className, isCollapsed }: RoleSwitcherProps) => {
     const mockUsers: Record<UserRole, { id: string; name: string; email: string; role: UserRole }> = {
       superadmin: { id: '1', name: 'Super Admin', email: 'super@admin.com', role: 'superadmin' },
       admin: { id: '2', name: 'College Admin', email: 'admin@college.edu', role: 'admin' },
-      class_user: { id: '3', name: 'Teacher Smith', email: 'teacher@college.edu', role: 'class_user' },
+      // class_user: { id: '3', name: 'Teacher Smith', email: 'teacher@college.edu', role: 'class_user' },
       teacher: { id: '3', name: 'Teacher Smith', email: 'teacher@college.edu', role: 'teacher' },
       student: { id: '4', name: 'John Student', email: 'student@college.edu', role: 'student' }
     };
@@ -94,7 +88,7 @@ const RoleSwitcher = ({ className, isCollapsed }: RoleSwitcherProps) => {
       <div className="space-y-2">
         <div className="flex items-center space-x-2">
           <Icon className="h-4 w-4 text-sidebar-foreground" />
-          <span className="text-sm font-medium text-sidebar-foreground">Role (Demo)</span>
+          <span className="text-sm font-medium text-sidebar-foreground">Role</span>
         </div>
 
         <Select value={userProfile.role} onValueChange={handleRoleChange}>

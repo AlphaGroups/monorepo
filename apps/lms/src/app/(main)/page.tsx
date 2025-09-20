@@ -47,13 +47,13 @@ export default function LoginPage() {
           router.replace("/admin/dashboard");
           break;
         case "admin":
-          router.replace("/admin/college-dashboard");
+          router.replace("/dashboards/admin");
           break;
         case "teacher":
-          router.replace("/class/dashboard");
+          router.replace("/dashboards/teacher");
           break;
         case "student":
-          router.replace("/student/dashboard");
+          router.replace("/dashboards/student");
           break;
         default:
           router.replace("/");
