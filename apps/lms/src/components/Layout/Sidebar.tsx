@@ -36,11 +36,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {UserProfile} from "@/services/interfaces"
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
   className?: string;
   isCollapsed?: boolean;
+  userRole?:UserRole;
 }
 
 interface NavigationItem {
