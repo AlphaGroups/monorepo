@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,18 +17,9 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Eye,
-  EyeOff,
-  GraduationCap,
-  Mail,
-  Lock,
-  Loader2,
-} from "lucide-react";
+import { Eye, EyeOff, GraduationCap, Mail, Lock, Loader2 } from "lucide-react";
 
 import { toast, Toaster } from "sonner";
-import { AuthService } from "@/services/auth.service";
-import { UserProfile } from "@/services/interfaces";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -36,34 +28,9 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<UserProfile | null>(null);
 
+  const { login } = useAuth();
   const router = useRouter();
-
-  // 🚀 Redirect based on role after login
-  useEffect(() => {
-    if (user) {
-      const role = user.role?.toLowerCase(); // normalize role
-
-      switch (role) {
-        case "superadmin":
-        case "superadmin":
-          router.replace("/dashboards/superadmin");
-          break;
-        case "admin":
-          router.replace("/dashboards/admin");
-          break;
-        case "teacher":
-          router.replace("/dashboards/teacher");
-          break;
-        case "student":
-          router.replace("/dashboards/student");
-          break;
-        default:
-          router.replace("/");
-      }
-    }
-  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,14 +38,10 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // 1️⃣ Login API
-      await AuthService.login({ email, password });
-
-      // 2️⃣ Fetch Profile
-      const profile = await AuthService.getProfile();
-      setUser(profile);
-
-      toast.success(`Welcome back, ${profile.first_name}! 🎉`);
+      // Use the AuthContext login function which handles navigation
+      await login(email, password);
+      
+      // Navigation is handled by AuthContext, so we don't need to manually redirect
     } catch (err: any) {
       const message = err.response?.data?.detail || "Login failed";
       setError(message);
@@ -129,6 +92,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
                     required
+                    autoComplete="username" // ✅ add this
                   />
                 </div>
               </div>
@@ -148,6 +112,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
                     required
+                    autoComplete="current-password" // ✅ add this
                   />
                   <Button
                     type="button"

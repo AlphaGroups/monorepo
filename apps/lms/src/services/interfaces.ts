@@ -16,6 +16,7 @@ export interface LoginResponse {
 export type UserRole =
   | "superadmin"
   | "admin"
+  | "class_user"
   | "student"
   | "teacher";
 

@@ -33,15 +33,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Search, Plus, Play, BookOpen, Star, Eye } from "lucide-react";
 import { toast } from "sonner";
-import api from "@/services/api"; // your axios instance
+import api from "@/services/api";
 
 const videoFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  youtubeUrl: z.string().url("Please enter a valid YouTube URL"),
+  youtube_url: z.string().url("Please enter a valid YouTube URL"),
   category: z.string().min(1, "Category is required"),
   tags: z.string().optional(),
   difficulty: z.enum(["beginner", "intermediate", "advanced"]),
+  class_id: z.number().min(1).max(12),
 });
 
 type VideoFormData = z.infer<typeof videoFormSchema>;
@@ -50,6 +51,7 @@ interface Video {
   id: number;
   title: string;
   description: string;
+  youtube_url: string;
   youtubeId: string;
   thumbnail: string;
   duration: string;
@@ -58,6 +60,7 @@ interface Video {
   category: string;
   tags: string[];
   difficulty: "beginner" | "intermediate" | "advanced";
+  class_id: number;
   uploadDate: string;
   featured: boolean;
 }
@@ -72,6 +75,7 @@ const categories = [
   "Literature",
 ];
 const difficulties = ["All", "beginner", "intermediate", "advanced"];
+const classes = Array.from({ length: 12 }, (_, i) => i + 1); // 1-12
 
 const VideoLibrary = () => {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -80,43 +84,38 @@ const VideoLibrary = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState("All");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // form hook
   const form = useForm<VideoFormData>({
     resolver: zodResolver(videoFormSchema),
     defaultValues: {
       title: "",
       description: "",
-      youtubeUrl: "",
+      youtube_url: "",
       category: "",
       tags: "",
       difficulty: "beginner",
+      class_id: 1,
     },
   });
 
-  // Extract YouTube video ID
-  const extractYouTubeId = (url: string): string => {
+  const extractYouTubeId = (url: string) => {
     const regExp =
       /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return match && match[2].length === 11 ? match[2] : "";
   };
 
-  // Load videos from backend
-
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await api.get("/videos/"); // ✅ using your axios instance
+        const res = await api.get("/videos/");
         setVideos(res.data);
       } catch (error: any) {
-        console.error(error);
         toast.error("Failed to load videos");
       }
     };
-
     fetchVideos();
   }, []);
-  // Filter logic
+
   const filteredVideos = videos.filter((video) => {
     const matchesSearch =
       video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -124,7 +123,6 @@ const VideoLibrary = () => {
       video.tags.some((tag) =>
         tag.toLowerCase().includes(searchTerm.toLowerCase())
       );
-
     const matchesCategory =
       selectedCategory === "All" || video.category === selectedCategory;
     const matchesDifficulty =
@@ -133,10 +131,9 @@ const VideoLibrary = () => {
     return matchesSearch && matchesCategory && matchesDifficulty;
   });
 
-  // Handle form submit
   const onSubmit = async (data: VideoFormData) => {
     try {
-      const youtubeId = extractYouTubeId(data.youtubeUrl);
+      const youtubeId = extractYouTubeId(data.youtube_url);
       if (!youtubeId) {
         toast.error("Please enter a valid YouTube URL.");
         return;
@@ -145,16 +142,14 @@ const VideoLibrary = () => {
       const response = await api.post("/videos/", {
         ...data,
         youtubeId,
-        tags: data.tags?.split(",").map((tag) => tag.trim()) || [],
+        tags: data.tags?.split(",").map((t) => t.trim()) || [],
       });
 
-      const newVideo = response.data;
-      setVideos((prev) => [newVideo, ...prev]);
+      setVideos((prev) => [response.data, ...prev]);
       toast.success("Video added successfully!");
       setIsDialogOpen(false);
       form.reset();
     } catch (error: any) {
-      console.error(error);
       toast.error(error.response?.data?.detail || "Error while adding video.");
     }
   };
@@ -174,7 +169,7 @@ const VideoLibrary = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header & Add Video */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Video Library</h1>
@@ -198,6 +193,7 @@ const VideoLibrary = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-4"
               >
+                {/* Title */}
                 <FormField
                   control={form.control}
                   name="title"
@@ -211,9 +207,10 @@ const VideoLibrary = () => {
                     </FormItem>
                   )}
                 />
+                {/* YouTube URL */}
                 <FormField
                   control={form.control}
-                  name="youtubeUrl"
+                  name="youtube_url"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>YouTube URL</FormLabel>
@@ -227,6 +224,7 @@ const VideoLibrary = () => {
                     </FormItem>
                   )}
                 />
+                {/* Description */}
                 <FormField
                   control={form.control}
                   name="description"
@@ -243,6 +241,7 @@ const VideoLibrary = () => {
                     </FormItem>
                   )}
                 />
+                {/* Category & Difficulty */}
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -304,6 +303,35 @@ const VideoLibrary = () => {
                     )}
                   />
                 </div>
+                {/* Class */}
+                <FormField
+                  control={form.control}
+                  name="class_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Class</FormLabel>
+                      <Select
+                        onValueChange={(val) => field.onChange(Number(val))}
+                        defaultValue={field.value.toString()}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select class" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {classes.map((cls) => (
+                            <SelectItem key={cls} value={cls.toString()}>
+                              {cls}th
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Tags */}
                 <FormField
                   control={form.control}
                   name="tags"
@@ -334,58 +362,6 @@ const VideoLibrary = () => {
             </Form>
           </DialogContent>
         </Dialog>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Videos</p>
-                <p className="text-2xl font-bold">{videos.length}</p>
-              </div>
-              <Play className="h-8 w-8 text-primary" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Categories</p>
-                <p className="text-2xl font-bold">{categories.length - 1}</p>
-              </div>
-              <BookOpen className="h-8 w-8 text-secondary" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Featured</p>
-                <p className="text-2xl font-bold">
-                  {videos.filter((v) => v.featured).length}
-                </p>
-              </div>
-              <Star className="h-8 w-8 text-accent" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Views</p>
-                <p className="text-2xl font-bold">
-                  {videos.reduce((acc, v) => acc + Number(v.views || 0), 0)}
-                </p>
-              </div>
-              <Eye className="h-8 w-8 text-warning" />
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Filters */}

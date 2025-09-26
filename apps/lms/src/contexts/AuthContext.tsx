@@ -37,8 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const roleDashboards: Record<UserRole, string> = {
     superadmin: "/dashboards/superadmin",
     admin: "/dashboards/admin",
-    class_user: "/dashboard/teacher",
-    teacher: "/dashboard/teacher",
+    class_user: "/dashboards/teacher",
+    teacher: "/dashboards/teacher",
     student: "/dashboards/student",
   };
 
@@ -81,13 +81,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUserProfile(profile);
       localStorage.setItem("auth-userProfile", JSON.stringify(profile));
 
-      // Role-based redirection
-      const dashboard = roleDashboards[profile.role] || "/dashboard";
-      router.push(dashboard);
+      // Wait a tick to ensure state is updated before navigation
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Role-based redirection - ensure profile and role exist
+      if (profile && profile.role) {
+        const dashboard = roleDashboards[profile.role] || "/";
+        router.replace(dashboard); // Using replace instead of push to avoid back button issues
+      } else {
+        // Fallback if role is missing
+        router.replace("/");
+      }
     } catch (error) {
-      throw error;
-    } finally {
+      // Reset loading on error
       setIsLoading(false);
+      throw error;
     }
   };
 
