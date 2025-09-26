@@ -25,6 +25,7 @@ export const AuthService = {
       });
     } else {
       // 👩‍🏫 Admin/Teacher/Student flow
+      // For student authentication, the backend should handle the password generation logic
       res = await api.post<LoginResponse>("/auth/login", {
         email: payload.email,
         password: payload.password,
