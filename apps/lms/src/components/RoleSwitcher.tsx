@@ -56,17 +56,11 @@ const RoleSwitcher = ({ className, isCollapsed }: RoleSwitcherProps) => {
   // For demo purposes - in real app this would be handled by proper authentication
   const handleRoleChange = (newRole: UserRole) => {
     // Mock role switching for demo
-    const mockUsers: Record<UserRole, { id: string; name: string; email: string; role: UserRole }> = {
-      superadmin: { id: '1', name: 'Super Admin', email: 'super@admin.com', role: 'superadmin' },
-      admin: { id: '2', name: 'College Admin', email: 'admin@college.edu', role: 'admin' },
-      // class_user: { id: '3', name: 'Teacher Smith', email: 'teacher@college.edu', role: 'class_user' },
-      teacher: { id: '3', name: 'Teacher Smith', email: 'teacher@college.edu', role: 'teacher' },
-      student: { id: '4', name: 'John Student', email: 'student@college.edu', role: 'student' }
-    };
+  
 
 
-    const newUser = mockUsers[newRole];
-    localStorage.setItem('authUser', JSON.stringify(newUser));
+   
+    // localStorage.setItem('authUser', JSON.stringify(newUser));
     localStorage.setItem('authToken', 'demo-token-' + newRole);
     window.location.reload(); // Refresh to update auth context
   };

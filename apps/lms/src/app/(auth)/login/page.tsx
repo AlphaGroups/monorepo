@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,76 +15,32 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Eye,
-  EyeOff,
-  GraduationCap,
-  Mail,
-  Lock,
-  Loader2,
-} from "lucide-react";
+import { Eye, EyeOff, GraduationCap, Mail, Lock, Loader2 } from "lucide-react";
+import { Toaster } from "sonner";
+import { Suspense } from "react";
 
-import { toast, Toaster } from "sonner";
-import { AuthService } from "@/services/auth.service";
-import { UserProfile } from "@/services/interfaces";
-
-export default function LoginPage() {
+function LoginPageContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<UserProfile | null>(null);
 
-  const router = useRouter();
+  const { login, isLoading } = useAuth();
 
-  // 🚀 Redirect based on role after login
   useEffect(() => {
-    if (user) {
-      const role = user.role?.toLowerCase(); // normalize role
-
-      switch (role) {
-        case "superadmin":
-        case "superadmin":
-          router.replace("/dashboards/superadmin");
-          break;
-        case "admin":
-          router.replace("/dashboards/admin");
-          break;
-        case "teacher":
-          router.replace("/dashboards/teacher");
-          break;
-        case "student":
-          router.replace("/dashboards/student");
-          break;
-        default:
-          router.replace("/");
-      }
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
     }
-  }, [user, router]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
+    if (rememberMe) localStorage.setItem("rememberedEmail", email);
+    else localStorage.removeItem("rememberedEmail");
 
-    try {
-      // 1️⃣ Login API
-      await AuthService.login({ email, password });
-
-      // 2️⃣ Fetch Profile
-      const profile = await AuthService.getProfile();
-      setUser(profile);
-
-      toast.success(`Welcome back, ${profile.first_name}! 🎉`);
-    } catch (err: any) {
-      const message = err.response?.data?.detail || "Login failed";
-      setError(message);
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
+    await login(email, password);
   };
 
   return (
@@ -108,11 +63,8 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
-              {error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+            
+          
 
               {/* Email */}
               <div className="space-y-2">
@@ -129,6 +81,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
                     required
+                    autoComplete="username"
                   />
                 </div>
               </div>
@@ -148,6 +101,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
                     required
+                    autoComplete="current-password"
                   />
                   <Button
                     type="button"
@@ -210,3 +164,19 @@ export default function LoginPage() {
     </div>
   );
 }
+
+function LoginPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gradient-hero p-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+export default LoginPage;
