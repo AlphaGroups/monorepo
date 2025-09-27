@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { Suspense } from "react";
 
-function ProfilePageContent() {
+function PageContent() {
   const { userProfile, } = useAuth();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState(userProfile);
@@ -116,7 +116,7 @@ function ProfilePageContent() {
   );
 }
 
-function ProfilePage() {
+function Page() {
   return (
     <Suspense 
       fallback={
@@ -125,9 +125,9 @@ function ProfilePage() {
         </div>
       }
     >
-      <ProfilePageContent />
+      <PageContent />
     </Suspense>
   );
 }
 
-export default ProfilePage;
+export default Page;

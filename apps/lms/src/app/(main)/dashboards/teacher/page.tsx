@@ -345,7 +345,7 @@ function ClassUserDashboardContent() {
   );
 }
 
-function ClassUserDashboard() {
+function Page() {
   return (
     <Suspense 
       fallback={
@@ -359,4 +359,4 @@ function ClassUserDashboard() {
   );
 }
 
-export default ClassUserDashboard;
+export default Page;
