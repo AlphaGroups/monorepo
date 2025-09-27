@@ -142,9 +142,9 @@
     --popover-foreground: 222 84% 4.9%;
     
     /* Primary Brand - Professional Education Blue */
-    --primary: 217 91% 35%;
+    --primary: 221 91% 54%; /* Tailwind blue-600 equivalent in HSL */
     --primary-foreground: 240 10% 98%;
-    --primary-glow: 217 91% 50%;
+    --primary-glow: 221 91% 64%;
     
     /* Secondary - Sophisticated Purple for Accents */
     --secondary: 262 83% 58%;
@@ -171,23 +171,23 @@
     /* Interface Elements */
     --border: 240 6% 90%;
     --input: 240 6% 95%;
-    --ring: 217 91% 35%;
+    --ring: 221 91% 54%;
     
     /* Component Radius */
     --radius: 0.75rem;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 35%), hsl(217 91% 50%));
+    --gradient-primary: linear-gradient(135deg, hsl(221 91% 54%), hsl(221 91% 64%));
     --gradient-secondary: linear-gradient(135deg, hsl(262 83% 58%), hsl(262 83% 70%));
     --gradient-accent: linear-gradient(135deg, hsl(142 72% 29%), hsl(142 72% 45%));
-    --gradient-hero: linear-gradient(135deg, hsl(217 91% 35%) 0%, hsl(262 83% 58%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(221 91% 54%) 0%, hsl(262 83% 58%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(240 10% 100%) 0%, hsl(240 10% 98%) 100%);
     
     /* Shadows */
     --shadow-subtle: 0 1px 3px 0 hsl(240 6% 90% / 0.1), 0 1px 2px 0 hsl(240 6% 90% / 0.06);
     --shadow-medium: 0 4px 6px -1px hsl(240 6% 90% / 0.1), 0 2px 4px -1px hsl(240 6% 90% / 0.06);
     --shadow-large: 0 10px 15px -3px hsl(240 6% 90% / 0.1), 0 4px 6px -2px hsl(240 6% 90% / 0.05);
-    --shadow-glow: 0 0 20px hsl(217 91% 35% / 0.25);
+    --shadow-glow: 0 0 20px hsl(221 91% 54% / 0.25);
     
     /* Animation Durations */
     --duration-fast: 150ms;
@@ -215,9 +215,9 @@
     --popover: 240 10% 12%;
     --popover-foreground: 240 10% 98%;
     
-    --primary: 217 91% 50%;
+    --primary: 221 91% 54%; /* Tailwind blue-600 equivalent in HSL */
     --primary-foreground: 240 10% 9%;
-    --primary-glow: 217 91% 65%;
+    --primary-glow: 221 91% 64%;
     
     --secondary: 262 83% 70%;
     --secondary-foreground: 240 10% 9%;
@@ -239,18 +239,18 @@
     
     --border: 240 6% 18%;
     --input: 240 6% 15%;
-    --ring: 217 91% 50%;
+    --ring: 221 91% 54%;
     
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 50%), hsl(217 91% 65%));
+    --gradient-primary: linear-gradient(135deg, hsl(221 91% 54%), hsl(221 91% 64%));
     --gradient-secondary: linear-gradient(135deg, hsl(262 83% 70%), hsl(262 83% 80%));
     --gradient-accent: linear-gradient(135deg, hsl(142 72% 45%), hsl(142 72% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(262 83% 70%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(221 91% 54%) 0%, hsl(262 83% 70%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(240 10% 12%) 0%, hsl(240 10% 10%) 100%);
     
     --shadow-subtle: 0 1px 3px 0 hsl(240 10% 5% / 0.3), 0 1px 2px 0 hsl(240 10% 5% / 0.2);
     --shadow-medium: 0 4px 6px -1px hsl(240 10% 5% / 0.3), 0 2px 4px -1px hsl(240 10% 5% / 0.2);
     --shadow-large: 0 10px 15px -3px hsl(240 10% 5% / 0.3), 0 4px 6px -2px hsl(240 10% 5% / 0.2);
-    --shadow-glow: 0 0 20px hsl(217 91% 50% / 0.4);
+    --shadow-glow: 0 0 20px hsl(221 91% 54% / 0.4);
     
     --sidebar-background: 240 10% 11%;
     --sidebar-foreground: 240 10% 85%;
@@ -276,7 +276,7 @@
 @layer components {
   /* Custom gradient definitions */
   .bg-gradient-primary {
-    background: linear-gradient(135deg, oklch(0.21 0.034 264.665), oklch(0.35 0.054 264.665));
+    background: linear-gradient(135deg, oklch(40.867% 0.06982 264.65), oklch(52.494% 0.25245 262.614));
   }
   
   .bg-gradient-secondary {
@@ -338,5 +338,16 @@
   .card-elegant:hover {
     box-shadow: 0 4px 6px -1px oklch(0.928 0.006 264.531 / 0.1), 0 2px 4px -1px oklch(0.928 0.006 264.531 / 0.06);
     transform: translateY(-1px);
+  }
+  
+  /* Button animation */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
   }
 }

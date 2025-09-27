@@ -35,7 +35,7 @@ import { cn } from "@/lib/utils";
 interface SidebarProps {
   className?: string;
   isCollapsed?: boolean;
-  userRole?:UserRole;
+  userRole?: UserRole;
 }
 
 interface NavigationItem {
@@ -46,28 +46,36 @@ interface NavigationItem {
   children?: NavigationItem[];
 }
 
-const NavItemComponent = React.memo(({ item, pathname, isCollapsed, openGroups, toggleGroup }: { 
-  item: NavigationItem; 
-  pathname: string; 
-  isCollapsed: boolean; 
-  openGroups: string[]; 
-  toggleGroup: (title: string) => void;
-}) => {
-  const hasChildren = !!item.children?.length;
-  const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-  const isGroupOpen = openGroups.includes(item.title);
+const NavItemComponent = React.memo(
+  ({
+    item,
+    pathname,
+    isCollapsed,
+    openGroups,
+    toggleGroup,
+  }: {
+    item: NavigationItem;
+    pathname: string;
+    isCollapsed: boolean;
+    openGroups: string[];
+    toggleGroup: (title: string) => void;
+  }) => {
+    const hasChildren = !!item.children?.length;
+    const isActive =
+      pathname === item.href || pathname.startsWith(item.href + "/");
+    const isGroupOpen = openGroups.includes(item.title);
 
-  const isActiveLink = (href: string) =>
-    pathname === href || pathname.startsWith(href + "/");
+    const isActiveLink = (href: string) =>
+      pathname === href || pathname.startsWith(href + "/");
 
-  if (hasChildren) {
-    return (
-      <Collapsible
-        open={isGroupOpen}
-        onOpenChange={(open) => toggleGroup(item.title)}
-      >
-        <CollapsibleTrigger asChild>
-          <Button className="w-full justify-start px-3 bg-blue-500 text-white">
+    if (hasChildren) {
+      return (
+        <Collapsible
+          open={isGroupOpen}
+          onOpenChange={(open) => toggleGroup(item.title)}
+        >
+          {/* <CollapsibleTrigger asChild>
+          <Button className="w-full justify-start px-3">
             <item.icon className="mr-3 h-4 w-4" />
             {!isCollapsed && (
               <>
@@ -81,55 +89,75 @@ const NavItemComponent = React.memo(({ item, pathname, isCollapsed, openGroups, 
               </>
             )}
           </Button>
-        </CollapsibleTrigger>
+        </CollapsibleTrigger> */}
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="outline" // ✅ ensures default blue style
+              className="w-full justify-start px-3"
+            >
+              <item.icon className="mr-3 h-4 w-4" />
+              {!isCollapsed && (
+                <>
+                  <span className="flex-1 text-left">{item.title}</span>
+                  {item.badge && <Badge className="ml-2">{item.badge}</Badge>}
+                  {isGroupOpen ? (
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  )}
+                </>
+              )}
+            </Button>
+          </CollapsibleTrigger>
 
-        {!isCollapsed && (
-          <CollapsibleContent className="space-y-1 px-3">
-            {item.children?.map((child) => (
-              <Link
-                key={child.href}
-                href={child.href}
-                className={cn(
-                  "flex items-center px-3 py-2 text-sm rounded-md transition-colors mt-2",
-                  isActiveLink(child.href)
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-blue-100 hover:text-blue-700"
-                )}
-              >
-                <child.icon className="mr-3 h-4 w-4" />
-                {child.title}
-              </Link>
-            ))}
-          </CollapsibleContent>
+          {!isCollapsed && (
+            <CollapsibleContent className="space-y-1 px-3">
+              {item.children?.map((child) => (
+                <Link
+                  key={child.href}
+                  href={child.href}
+                  className={cn(
+                    "flex items-center px-3 py-2 text-sm rounded-md transition-colors mt-2",
+                    isActiveLink(child.href)
+                      ? "bg-gray-50 text-gray-700"
+                      : "hover:bg-blue-200 hover:text-gray-500"
+                  )}
+                >
+                  <child.icon className="mr-3 h-4 w-4" />
+                  {child.title}
+                </Link>
+              ))}
+            </CollapsibleContent>
+          )}
+        </Collapsible>
+      );
+    }
+
+    return (
+      <Link
+        href={item.href}
+        className={cn(
+          "flex items-center px-3 py-2 text-sm rounded-md transition-colors",
+          isActive
+            ? "bg-gray50 text-gray-700"
+            : "hover:bg-blue-200 hover:text-gray-500"
         )}
-      </Collapsible>
+      >
+        <item.icon className="mr-3 h-4 w-4" />
+        {!isCollapsed && (
+          <>
+            <span className="flex-1">{item.title}</span>
+            {item.badge && (
+              <Badge variant="secondary" className="ml-2 h-5 text-xs">
+                {item.badge}
+              </Badge>
+            )}
+          </>
+        )}
+      </Link>
     );
   }
-
-  return (
-    <Link
-      href={item.href}
-      className={cn(
-        "flex items-center px-3 py-2 text-sm rounded-md transition-colors",
-        isActive
-          ? "bg-blue-500 text-white"
-          : "hover:bg-blue-100 hover:text-blue-700"
-      )}
-    >
-      <item.icon className="mr-3 h-4 w-4" />
-      {!isCollapsed && (
-        <>
-          <span className="flex-1">{item.title}</span>
-          {item.badge && (
-            <Badge variant="secondary" className="ml-2 h-5 text-xs">
-              {item.badge}
-            </Badge>
-          )}
-        </>
-      )}
-    </Link>
-  );
-});
+);
 
 const Sidebar = ({ className, isCollapsed = false }: SidebarProps) => {
   const { userProfile } = useAuth();
@@ -146,7 +174,7 @@ const Sidebar = ({ className, isCollapsed = false }: SidebarProps) => {
 
   const navigationItems = useMemo(() => {
     if (!userProfile) return [];
-    
+
     const role = userProfile.role;
     switch (role) {
       case "superadmin":
