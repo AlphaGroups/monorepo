@@ -39,7 +39,7 @@ interface Metric {
   href: string;
 }
 
-function SuperAdminDashboardContent() {
+const SuperAdminDashboard = () => {
   const [metrics, setMetrics] = useState<Metric[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any[]>([]);
@@ -264,20 +264,6 @@ function SuperAdminDashboardContent() {
       </Card>
     </div>
   );
-}
-
-function SuperAdminDashboard() {
-  return (
-    <Suspense 
-      fallback={
-        <div className="flex justify-center items-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-        </div>
-      }
-    >
-      <SuperAdminDashboardContent />
-    </Suspense>
-  );
-}
+};
 
 export default SuperAdminDashboard;

@@ -343,7 +343,7 @@ function ClassUserDashboardContent() {
       </Card>
     </div>
   );
-};
+}
 
 function ClassUserDashboard() {
   return (

@@ -34,7 +34,6 @@ import * as z from "zod";
 import { Search, Plus, Play, BookOpen, Star, Eye } from "lucide-react";
 // import { useToast } from '@/components/ui/use-toast';
 import { toast, Toaster } from "sonner";
-import { Suspense } from "react";
 
 const videoFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -126,7 +125,7 @@ const categories = [
 ];
 const difficulties = ["All", "beginner", "intermediate", "advanced"];
 
-function VideoLibraryContent() {
+const VideoLibrary = () => {
   const [videos, setVideos] = useState<Video[]>(mockVideos);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -558,19 +557,5 @@ function VideoLibraryContent() {
     </div>
   );
 };
-
-function VideoLibrary() {
-  return (
-    <Suspense 
-      fallback={
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-        </div>
-      }
-    >
-      <VideoLibraryContent />
-    </Suspense>
-  );
-}
 
 export default VideoLibrary;

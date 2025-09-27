@@ -1,19 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 
-const NotFound = () => {
-  const pathname = usePathname();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      pathname
-    );
-  }, [pathname]);
-
+function NotFoundContent() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center">
@@ -30,6 +20,23 @@ const NotFound = () => {
       </div>
     </div>
   );
-};
+}
 
-export default NotFound;
+export default function NotFound() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4 text-primary">404</h1>
+            <p className="text-xl text-muted-foreground mb-4">
+              Loading...
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <NotFoundContent />
+    </Suspense>
+  );
+}
