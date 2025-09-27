@@ -239,7 +239,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle ,CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 // import { BarChart3, Plus, Users, Building2, GraduationCap } from "lucide-react";
@@ -277,8 +283,11 @@ const SuperAdminDashboard = () => {
   const [health, setHealth] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchCounts = async () => {
+    const fetchDashboardData = async () => {
       try {
+        setLoading(true);
+
+        // Fetch counts using the correct API endpoints
         const [adminsRes, collegesRes, teachersRes, studentsRes] =
           await Promise.all([
             api.get("/admins"),
@@ -287,48 +296,58 @@ const SuperAdminDashboard = () => {
             api.get("/students"),
           ]);
 
-        setMetrics([
+        // Format metrics data
+        const newMetrics: Metric[] = [
           {
             title: "Total Admins",
-            value: adminsRes.data.length,
+            value: adminsRes.data.count || adminsRes.data.length,
             change: "+3",
-            changeType: "positive",
+            changeType: "positive" as const,
             icon: Users,
             href: "/admin/users/admins",
           },
           {
             title: "Colleges",
-            value: collegesRes.data.length,
+            value: collegesRes.data.count || collegesRes.data.length,
             change: "+2",
-            changeType: "positive",
+            changeType: "positive" as const,
             icon: Building2,
             href: "/admin/colleges",
           },
           {
             title: "Teachers",
-            value: teachersRes.data.length,
+            value: teachersRes.data.count || teachersRes.data.length,
             change: "+5",
-            changeType: "positive",
+            changeType: "positive" as const,
             icon: GraduationCap,
             href: "/admin/users/teachers",
           },
           {
             title: "Students",
-            value: studentsRes.data.length,
+            value: studentsRes.data.count || studentsRes.data.length,
             change: "+127",
-            changeType: "positive",
+            changeType: "positive" as const,
             icon: Users,
             href: "/admin/users/students",
           },
-        ]);
+        ];
+
+        setMetrics(newMetrics);
+
+        // Uncomment when these endpoints are available
+        // const activitiesRes = await api.get("/dashboard/activities");
+        // setActivities(activitiesRes.data);
+
+        // const healthRes = await api.get("/dashboard/system-health");
+        // setHealth(healthRes.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching dashboard data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCounts();
+    fetchDashboardData();
   }, []);
 
   return (
@@ -356,7 +375,9 @@ const SuperAdminDashboard = () => {
       {/* Metrics Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {loading ? (
-          <p className="text-muted-foreground">Loading metrics...</p>
+          <div className="col-span-full flex justify-center items-center py-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+          </div>
         ) : (
           metrics.map((metric, index) => (
             <Card key={index} className="hover-lift card-elegant">
@@ -415,7 +436,7 @@ const SuperAdminDashboard = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Recent Activity Feed */}
+        {/* Recent Activity Feed - Placeholder for now */}
         <Card className="card-elegant">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -425,40 +446,13 @@ const SuperAdminDashboard = () => {
             <CardDescription>Latest system-wide activities</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {activities.map((activity, index) => (
-              <div
-                key={index}
-                className="flex items-start space-x-3 pb-3 last:pb-0 border-b last:border-0"
-              >
-                <div className="p-2 bg-primary/10 rounded-full">
-                  {activity.type === "user" && (
-                    <Users className="h-3 w-3 text-primary" />
-                  )}
-                  {activity.type === "content" && (
-                    <Video className="h-3 w-3 text-primary" />
-                  )}
-                  {activity.type === "college" && (
-                    <Building2 className="h-3 w-3 text-primary" />
-                  )}
-                  {activity.type === "system" && (
-                    <Server className="h-3 w-3 text-primary" />
-                  )}
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium">{activity.action}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {activity.details}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {activity.time}
-                  </p>
-                </div>
-              </div>
-            ))}
+            <p className="text-muted-foreground text-center py-4">
+              Activity data coming soon...
+            </p>
           </CardContent>
         </Card>
 
-        {/* System Health */}
+        {/* System Health - Placeholder for now */}
         <Card className="card-elegant">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -470,24 +464,9 @@ const SuperAdminDashboard = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {health.map((item, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium">{item.name}</span>
-                    {item.status === "operational" ? (
-                      <CheckCircle className="h-4 w-4 text-success" />
-                    ) : (
-                      <AlertCircle className="h-4 w-4 text-warning" />
-                    )}
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {item.value}%
-                  </span>
-                </div>
-                <Progress value={item.value} className="h-2" />
-              </div>
-            ))}
+            <p className="text-muted-foreground text-center py-4">
+              System health data coming soon...
+            </p>
           </CardContent>
         </Card>
       </div>

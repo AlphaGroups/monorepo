@@ -81,12 +81,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUserProfile(profile);
       localStorage.setItem("auth-userProfile", JSON.stringify(profile));
 
-      // Wait a tick to ensure state is updated before navigation
-      await new Promise(resolve => setTimeout(resolve, 0));
-      
       // Role-based redirection - ensure profile and role exist
       if (profile && profile.role) {
         const dashboard = roleDashboards[profile.role] || "/";
+        // Navigate immediately to prevent delays
         router.replace(dashboard); // Using replace instead of push to avoid back button issues
       } else {
         // Fallback if role is missing
@@ -96,6 +94,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Reset loading on error
       setIsLoading(false);
       throw error;
+    } finally {
+      // Ensure loading is reset in all cases
+      setIsLoading(false);
     }
   };
 

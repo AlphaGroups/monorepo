@@ -169,7 +169,7 @@
 
 // export default MainLayout;
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -180,9 +180,28 @@ interface MainLayoutProps {
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const { userProfile } = useAuth();
+  const { userProfile, isLoading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Return early if not mounted to prevent hydration issues
+  if (!isMounted || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // If no user profile, don't render the layout
+  if (!userProfile) {
+    return <div className="min-h-screen flex items-center justify-center">Access denied</div>;
+  }
 
   return (
     <div className="min-h-screen bg-background">

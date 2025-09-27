@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,13 +27,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import YouTubeEmbed from "@/components/YouTubeEmbed";
+import LazyYouTubeEmbed from "@/components/LazyYouTubeEmbed";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Search, Plus, Play, BookOpen, Star, Eye } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/services/api";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 const videoFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -77,12 +78,13 @@ const categories = [
 const difficulties = ["All", "beginner", "intermediate", "advanced"];
 const classes = Array.from({ length: 12 }, (_, i) => i + 1); // 1-12
 
-const VideoLibrary = () => {
+function VideoLibraryContent() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedDifficulty, setSelectedDifficulty] = useState("All");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoadingVideos, setIsLoadingVideos] = useState(true);
 
   const form = useForm<VideoFormData>({
     resolver: zodResolver(videoFormSchema),
@@ -106,11 +108,14 @@ const VideoLibrary = () => {
 
   useEffect(() => {
     const fetchVideos = async () => {
+      setIsLoadingVideos(true);
       try {
         const res = await api.get("/videos/");
         setVideos(res.data);
       } catch (error: any) {
         toast.error("Failed to load videos");
+      } finally {
+        setIsLoadingVideos(false);
       }
     };
     fetchVideos();
@@ -407,44 +412,54 @@ const VideoLibrary = () => {
       </div>
 
       {/* Video Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredVideos.map((video) => (
-          <div key={video.id} className="space-y-3">
-            <YouTubeEmbed
-              videoId={video.youtubeId}
-              title={video.title}
-              duration={video.duration}
-              views={video.views}
-              likes={video.likes}
-              description={video.description}
-              className="w-full"
-            />
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Badge variant="secondary">{video.category}</Badge>
-                <Badge className={getDifficultyColor(video.difficulty)}>
-                  {video.difficulty}
-                </Badge>
-              </div>
-              {video.featured && (
-                <Badge variant="default" className="bg-gradient-primary">
-                  <Star className="h-3 w-3 mr-1" />
-                  Featured
-                </Badge>
-              )}
-              <div className="flex flex-wrap gap-1">
-                {video.tags.slice(0, 3).map((tag, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {tag}
+      {isLoadingVideos ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, index) => (
+            <div key={`skeleton-${index}`} className="space-y-3">
+              <LoadingSkeleton type="video" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredVideos.map((video) => (
+            <div key={video.id} className="space-y-3">
+              <LazyYouTubeEmbed
+                videoId={video.youtubeId}
+                title={video.title}
+                duration={video.duration}
+                views={video.views}
+                likes={video.likes}
+                description={video.description}
+                className="w-full"
+              />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Badge variant="secondary">{video.category}</Badge>
+                  <Badge className={getDifficultyColor(video.difficulty)}>
+                    {video.difficulty}
                   </Badge>
-                ))}
+                </div>
+                {video.featured && (
+                  <Badge variant="default" className="bg-gradient-primary">
+                    <Star className="h-3 w-3 mr-1" />
+                    Featured
+                  </Badge>
+                )}
+                <div className="flex flex-wrap gap-1">
+                  {video.tags.slice(0, 3).map((tag, index) => (
+                    <Badge key={index} variant="outline" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {filteredVideos.length === 0 && (
+      {!isLoadingVideos && filteredVideos.length === 0 && (
         <div className="text-center py-8">
           <Play className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">No videos found</h3>
@@ -455,6 +470,20 @@ const VideoLibrary = () => {
       )}
     </div>
   );
-};
+}
 
-export default VideoLibrary;
+export default function VideoLibrary() {
+  return (
+    <Suspense fallback={
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, index) => (
+          <div key={`skeleton-${index}`} className="space-y-3">
+            <LoadingSkeleton type="video" />
+          </div>
+        ))}
+      </div>
+    }>
+      <VideoLibraryContent />
+    </Suspense>
+  );
+}
