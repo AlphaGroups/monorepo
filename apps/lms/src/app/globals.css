@@ -1,6 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
+
+/* @tailwind base;
+@tailwind components; */
+@tailwind utilities;
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -121,9 +128,7 @@
   }
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 /* LMS Education Platform Design System - All colors MUST be HSL */
 

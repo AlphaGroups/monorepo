@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,37 +16,30 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, GraduationCap, Mail, Lock, Loader2 } from "lucide-react";
-
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuth();
-  const router = useRouter();
+  const { login, isLoading } = useAuth();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
+    if (rememberMe) localStorage.setItem("rememberedEmail", email);
+    else localStorage.removeItem("rememberedEmail");
 
-    try {
-      // Use the AuthContext login function which handles navigation
-      await login(email, password);
-      
-      // Navigation is handled by AuthContext, so we don't need to manually redirect
-    } catch (err: any) {
-      const message = err.response?.data?.detail || "Login failed";
-      setError(message);
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
+    await login(email, password);
   };
 
   return (
@@ -71,11 +62,8 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
-              {error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+            
+          
 
               {/* Email */}
               <div className="space-y-2">
@@ -92,7 +80,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10"
                     required
-                    autoComplete="username" // ✅ add this
+                    autoComplete="username"
                   />
                 </div>
               </div>
@@ -112,7 +100,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 pr-10"
                     required
-                    autoComplete="current-password" // ✅ add this
+                    autoComplete="current-password"
                   />
                   <Button
                     type="button"
