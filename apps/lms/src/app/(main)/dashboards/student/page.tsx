@@ -406,9 +406,10 @@ import {
   BookOpen, Video, FileText, Trophy, Calendar, Play,
   Clock, CheckCircle, Star, TrendingUp, Bell, Target
 } from "lucide-react";
+import { Suspense } from "react";
 // import { StudentService } from "@/services/student/student";
 
-const StudentDashboard = () => {
+function StudentDashboardContent() {
   const [loading, setLoading] = useState(true);
 
   // Define static data for now as placeholders
@@ -799,6 +800,20 @@ const StudentDashboard = () => {
       </Card>
     </div>
   );
-};
+}
+
+function StudentDashboard() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      }
+    >
+      <StudentDashboardContent />
+    </Suspense>
+  );
+}
 
 export default StudentDashboard;
