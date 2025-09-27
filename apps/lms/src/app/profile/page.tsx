@@ -5,9 +5,10 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { Suspense } from "react";
 
-export default function ProfilePage() {
-  const { userProfile,  } = useAuth();
+function PageContent() {
+  const { userProfile, } = useAuth();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState(userProfile);
 
@@ -114,3 +115,19 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+function Page() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      }
+    >
+      <PageContent />
+    </Suspense>
+  );
+}
+
+export default Page;

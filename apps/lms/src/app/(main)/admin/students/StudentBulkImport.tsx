@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, CheckCircle, XCircle, AlertTriangle, FileText } from 'lucide-react';
 import { toast } from 'sonner';
+import { importStudents } from '@/services/student/student';
 
 interface ImportResult {
   id: string;
@@ -61,69 +62,35 @@ Mike Johnson,mike.johnson@example.com,STU003,(555) 456-7890,"class-2,class-3",19
     setImporting(true);
     setProgress(0);
     
-    // Simulate reading CSV and processing
-    const mockResults: ImportResult[] = [
-      {
-        id: '1',
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        studentId: 'STU001',
-        status: 'success',
-        message: 'Student imported successfully'
-      },
-      {
-        id: '2',
-        name: 'Jane Smith',
-        email: 'jane.smith@example.com',
-        studentId: 'STU002',
-        status: 'success',
-        message: 'Student imported successfully'
-      },
-      {
-        id: '3',
-        name: 'Mike Johnson',
-        email: 'mike.johnson@example.com',
-        studentId: 'STU003',
-        status: 'warning',
-        message: 'Student imported but some classes not found'
-      },
-      {
-        id: '4',
-        name: 'Invalid User',
-        email: 'invalid-email',
-        studentId: 'STU004',
-        status: 'error',
-        message: 'Invalid email format'
-      }
-    ];
-
-    // Simulate progress
-    for (let i = 0; i <= 100; i += 10) {
-      setProgress(i);
-      await new Promise(resolve => setTimeout(resolve, 200));
-    }
-
-    setResults(mockResults);
-    setImporting(false);
-
-    // Make API call to import students
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      // Use the service function to import students
+      const data = await importStudents(file);
       
-      const response = await fetch('/api/students/bulk-import', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setResults(data.results || mockResults);
-        toast.success(`Import completed! ${data.successful || 3} students imported successfully.`);
-      }
+      // Update results based on the response
+      setResults(data.results || []);
+      toast.success(`Import completed! ${data.successful_imports || 0} students imported successfully.`);
     } catch (error) {
       console.error('Import error:', error);
       toast.error('Import failed. Please try again.');
+      // Set error results if available
+      if (error instanceof Error && 'response' in error) {
+        // Get error details from the backend response
+        const errorResponse = (error as any).response?.data;
+        if (errorResponse && errorResponse.errors) {
+          // Process error results
+          const errorResults: ImportResult[] = errorResponse.errors.map((err: any, index: number) => ({
+            id: `error-${index}`,
+            name: `Row ${index + 2}`,
+            email: '',
+            studentId: '',
+            status: 'error',
+            message: err
+          }));
+          setResults(errorResults);
+        }
+      }
+    } finally {
+      setImporting(false);
     }
   };
 

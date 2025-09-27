@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,8 +17,9 @@ import {
   TrendingUp,
   Calendar
 } from 'lucide-react';
+import { Suspense } from 'react';
 
-const ClassUserDashboard = () => {
+function ClassUserDashboardContent() {
   const classStats = [
     {
       title: 'Students',
@@ -341,6 +343,20 @@ const ClassUserDashboard = () => {
       </Card>
     </div>
   );
-};
+}
 
-export default ClassUserDashboard;
+function Page() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      }
+    >
+      <ClassUserDashboardContent />
+    </Suspense>
+  );
+}
+
+export default Page;
