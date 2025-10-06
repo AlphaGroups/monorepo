@@ -60,7 +60,7 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Link href="/login">
+            {/* <Link href="/login">
               <Button
                 size="sm"
                 className="bg-blue-500 text-white hover:bg-blue-600"
@@ -75,7 +75,7 @@ const Header = () => {
               >
                 Register
               </Button>
-            </Link>
+            </Link> */}
 
             <Link href={`${LMS_URL}/login`} target="_blank">
               <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
