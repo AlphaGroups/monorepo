@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 
-const LMS_URL = process.env.NEXT_PUBLIC_LMS_URL || "/lms" ;
+const LMS_URL = process.env.NEXT_PUBLIC_LMS_URL || "/lms";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,7 +60,7 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Link href="/login">
+            {/* <Link href="/login">
               <Button
                 size="sm"
                 className="bg-blue-500 text-white hover:bg-blue-600"
@@ -75,7 +75,7 @@ const Header = () => {
               >
                 Register
               </Button>
-            </Link>
+            </Link> */}
 
             <Link href={`${LMS_URL}/login`} target="_blank">
               <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
@@ -117,7 +117,7 @@ const Header = () => {
               </Link>
             ))}
             <div className="pt-2 space-y-2">
-              <Link href="/login">
+              {/* <Link href="/login">
                 <Button variant="hero" size="sm" className="w-full">
                   Login
                 </Button>
@@ -126,7 +126,7 @@ const Header = () => {
                 <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
                   Register
                 </Button>
-              </Link>
+              </Link>*/}
 
               <Link href={`${LMS_URL}/login`} target="_blank">
                 <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
