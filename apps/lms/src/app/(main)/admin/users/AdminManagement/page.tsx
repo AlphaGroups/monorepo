@@ -627,7 +627,7 @@ export default function AdminManagement() {
                                 setEditingAdmin(admin);
                                 form.setValue("name", admin.full_name);
                                 form.setValue("email", admin.email);
-                                form.setValue("mobile", admin.mobile);
+                                form.setValue("mobile", admin.mobile || "");
                                 form.setValue("password", "");
                                 form.setValue(
                                   "collegeId",
