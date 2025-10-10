@@ -100,10 +100,10 @@ function VideoLibraryContent() {
   });
 
   const extractYouTubeId = (url: string) => {
-    const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    // More comprehensive regex to handle various YouTube URL formats
+    const regExp = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : "";
+    return match && match[1] ? match[1] : "";
   };
 
   useEffect(() => {
@@ -137,24 +137,36 @@ function VideoLibraryContent() {
   });
 
   const onSubmit = async (data: VideoFormData) => {
+    console.log("Form submitted with raw data:", data);
+    
     try {
       const youtubeId = extractYouTubeId(data.youtube_url);
+      console.log("Extracted YouTube ID:", youtubeId);
+      
       if (!youtubeId) {
         toast.error("Please enter a valid YouTube URL.");
         return;
       }
 
-      const response = await api.post("/videos/", {
+      // Prepare the payload to be sent to the API
+      const payload = {
         ...data,
         youtubeId,
         tags: data.tags?.split(",").map((t) => t.trim()) || [],
-      });
+      };
+
+      // Log the payload to console for debugging
+      console.log("Video creation payload:", payload);
+
+      const response = await api.post("/videos/", payload);
 
       setVideos((prev) => [response.data, ...prev]);
       toast.success("Video added successfully!");
       setIsDialogOpen(false);
       form.reset();
     } catch (error: any) {
+      console.error("Error creating video:", error);
+      console.error("Error details:", error.response || error.message);
       toast.error(error.response?.data?.detail || "Error while adding video.");
     }
   };
