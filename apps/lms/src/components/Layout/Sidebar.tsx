@@ -38,6 +38,7 @@ interface SidebarProps {
   isCollapsed?: boolean;
 
   userRole?: UserRole;
+  onClose?: any;
 
 
 }
@@ -57,12 +58,14 @@ const NavItemComponent = React.memo(
     isCollapsed,
     openGroups,
     toggleGroup,
+    onClose,
   }: {
     item: NavigationItem;
     pathname: string;
     isCollapsed: boolean;
     openGroups: string[];
     toggleGroup: (title: string) => void;
+    onClose?: () => void; // Function to close sidebar on mobile
   }) => {
     const hasChildren = !!item.children?.length;
     const isActive =
@@ -120,6 +123,12 @@ const NavItemComponent = React.memo(
                 <Link
                   key={child.href}
                   href={child.href}
+                  onClick={() => {
+                    // Close sidebar on mobile after a small delay to allow navigation
+                    if (onClose && window.innerWidth < 768) {
+                      setTimeout(() => onClose(), 100);
+                    }
+                  }}
                   className={cn(
                     "flex items-center px-3 py-2 text-sm rounded-md transition-colors mt-2",
                     isActiveLink(child.href)
@@ -140,6 +149,12 @@ const NavItemComponent = React.memo(
     return (
       <Link
         href={item.href}
+        onClick={() => {
+          // Close sidebar on mobile after a small delay to allow navigation
+          if (onClose && window.innerWidth < 768) {
+            setTimeout(() => onClose(), 100);
+          }
+        }}
         className={cn(
           "flex items-center px-3 py-2 text-sm rounded-md transition-colors",
           isActive
@@ -163,7 +178,7 @@ const NavItemComponent = React.memo(
   }
 );
 
-const Sidebar = ({ className, isCollapsed = false }: SidebarProps) => {
+const Sidebar = ({ className, isCollapsed = false, onClose }: SidebarProps) => {
   const { userProfile } = useAuth();
   const pathname = usePathname();
   const [openGroups, setOpenGroups] = useState<string[]>(["main"]);
@@ -345,6 +360,7 @@ const Sidebar = ({ className, isCollapsed = false }: SidebarProps) => {
               isCollapsed={isCollapsed}
               openGroups={openGroups}
               toggleGroup={toggleGroup}
+              onClose={onClose}
             />
           ))}
         </div>

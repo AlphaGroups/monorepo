@@ -95,8 +95,20 @@ export default function Page() {
       try {
         const safeGet = async (path: string) => {
           try {
-            const res = await api.get(path);
-            return res.data;
+            const res = await api.get(path, {
+              params: {
+                page: 1,
+                size: 50
+              }
+            });
+            
+            // Handle both direct array responses and paginated responses
+            if (Array.isArray(res.data)) {
+              return res.data;
+            } else {
+              // If response is paginated, use the data property
+              return res.data.data || [];
+            }
           } catch (err: any) {
             if ([404, 405].includes(err?.response?.status)) return null;
             throw err;
