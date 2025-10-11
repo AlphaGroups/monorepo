@@ -13,6 +13,15 @@ export interface LoginResponse {
   token_type: "bearer";
 }
 
+// Generic pagination response interface
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  size: number;
+  totalPages: number;
+}
+
 export type UserRole =
   | "superadmin"
   | "admin"
@@ -41,10 +50,11 @@ export interface AdminPayload {
 export interface Admin {
   id: string;
   name: string;
+  full_name:string;
   email: string;
-  collegeName: string;
+  college_name: string;
   collegeId: string;
-  phone?: string;
+  mobile?: string;
   avatar?: string;
   status: "active" | "inactive";
   createdAt: string;
@@ -63,4 +73,17 @@ export interface teacherData {
   password: string;
   college_id: number;
   subject: string;
+}
+
+export interface Student {
+  id: number;
+  full_name: string;
+  email: string;
+  mobile: string;
+  college_id: number;
+  class_id: number;
+  avatar?: string;
+  status: "active" | "inactive";
+  createdAt: string;
+  lastLogin?: string;
 }
