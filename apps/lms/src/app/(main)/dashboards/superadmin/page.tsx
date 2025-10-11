@@ -121,14 +121,14 @@ const Page: React.FC = () => {
             </p>
           </div>
           <div className="flex space-x-2">
-            <Button variant="outline">
+            {/* <Button variant="outline">
               <BarChart3 className="mr-2 h-4 w-4" />
               Reports
-            </Button>
-            <Button className="bg-gradient-primary">
+            </Button> */}
+            {/* <Button className="bg-gradient-primary">
               <Plus className="mr-2 h-4 w-4" />
               Quick Actions
-            </Button>
+            </Button> */}
           </div>
         </div>
 
