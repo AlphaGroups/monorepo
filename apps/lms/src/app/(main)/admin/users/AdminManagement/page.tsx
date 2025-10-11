@@ -124,20 +124,22 @@ export default function AdminManagement() {
   });
 
   // ✅ fetch admins
-  const fetchAdmins = async () => {
+  const fetchAdmins = async (page: number = 1, size: number = 10) => {
     try {
-      const data = await getAdmins();
-      setAdmins(Array.isArray(data) ? data : []);
+      const response = await getAdmins(page, size);
+      const adminsData = Array.isArray(response) ? response : response.data || [];
+      setAdmins(adminsData);
     } catch {
       toast.error("Failed to fetch admins.");
     }
   };
 
   // ✅ fetch colleges
-  const fetchColleges = async () => {
+  const fetchColleges = async (page: number = 1, size: number = 10) => {
     try {
-      const data = await getColleges();
-      setColleges(Array.isArray(data) ? data : []);
+      const response = await getColleges(page, size);
+      const collegesData = Array.isArray(response) ? response : response.data || [];
+      setColleges(collegesData);
     } catch {
       toast.error("Failed to fetch colleges.");
     }

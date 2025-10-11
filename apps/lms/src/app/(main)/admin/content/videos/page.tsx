@@ -110,8 +110,20 @@ function VideoLibraryContent() {
     const fetchVideos = async () => {
       setIsLoadingVideos(true);
       try {
-        const res = await api.get("/videos/");
-        setVideos(res.data);
+        const res = await api.get("/videos/", {
+          params: {
+            page: 1,
+            size: 50
+          }
+        });
+        
+        // Handle both direct array responses and paginated responses
+        if (Array.isArray(res.data)) {
+          setVideos(res.data);
+        } else {
+          // If response is paginated, use the data property
+          setVideos(res.data.data || []);
+        }
       } catch (error: any) {
         toast.error("Failed to load videos");
       } finally {

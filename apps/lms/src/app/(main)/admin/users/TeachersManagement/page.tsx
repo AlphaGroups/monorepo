@@ -98,8 +98,9 @@ const ClassUserManagement = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await fetchTeachers();
-        setTeachers(data.map(mapTeacher));
+        const response = await fetchTeachers(1, 50); // Fetch first 50 teachers
+        const teachersData = Array.isArray(response) ? response : response.data || [];
+        setTeachers(teachersData.map(mapTeacher));
       } catch {
         toast.error("Failed to fetch teachers.");
       }
@@ -133,7 +134,8 @@ const ClassUserManagement = () => {
         toast.success("New teacher created successfully.");
       }
 
-      const refreshed = await fetchTeachers();
+      const response = await fetchTeachers(1, 50); // Fetch first 50 teachers
+      const refreshed = Array.isArray(response) ? response : response.data || [];
       setTeachers(refreshed.map(mapTeacher));
     } catch {
       toast.error("Failed to save teacher.");

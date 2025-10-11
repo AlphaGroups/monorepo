@@ -1,5 +1,6 @@
 // apps/lms/src/services/admin.ts
 import api from "@/services/api";
+import { PaginatedResponse } from "@/services/interfaces";
 
 export interface AdminPayload {
   full_name: string;
@@ -28,17 +29,52 @@ export interface College {
   name: string;
 }
 
-// Fetch all admins
-export const getAdmins = async (): Promise<Admin[]> => {
-  const res = await api.get("/admins/");
-  const data = res.data;
-  return Array.isArray(data) ? data : data.admins || [];
+// Fetch all admins with pagination
+export const getAdmins = async (page: number = 1, size: number = 10): Promise<PaginatedResponse<Admin>> => {
+  const res = await api.get("/admins/", {
+    params: {
+      page,
+      size
+    }
+  });
+  
+  // Handle both direct array responses and paginated responses
+  if (Array.isArray(res.data)) {
+    return {
+      data: res.data,
+      total: res.data.length,
+      page: page,
+      size: size,
+      totalPages: Math.ceil(res.data.length / size)
+    };
+  } else {
+    // If the response is already paginated, return it directly
+    return res.data;
+  }
 };
 
-// Fetch all colleges
-export const getColleges = async (): Promise<College[]> => {
-  const res = await api.get("/colleges/");
-  return res.data;
+// Fetch all colleges with pagination
+export const getColleges = async (page: number = 1, size: number = 10): Promise<PaginatedResponse<College>> => {
+  const res = await api.get("/colleges/", {
+    params: {
+      page,
+      size
+    }
+  });
+  
+  // Handle both direct array responses and paginated responses
+  if (Array.isArray(res.data)) {
+    return {
+      data: res.data,
+      total: res.data.length,
+      page: page,
+      size: size,
+      totalPages: Math.ceil(res.data.length / size)
+    };
+  } else {
+    // If the response is already paginated, return it directly
+    return res.data;
+  }
 };
 
 // Create a new admin

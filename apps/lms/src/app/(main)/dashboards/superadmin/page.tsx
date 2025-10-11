@@ -47,16 +47,16 @@ const Page: React.FC = () => {
       try {
         const [adminsRes, collegesRes, teachersRes, studentsRes] =
           await Promise.all([
-            api.get("/admins"),
-            api.get("/colleges"),
-            api.get("/teachers"),
-            api.get("/students"),
+            api.get("/admins", { params: { page: 1, size: 50 } }),
+            api.get("/colleges", { params: { page: 1, size: 50 } }),
+            api.get("/teachers", { params: { page: 1, size: 50 } }),
+            api.get("/students", { params: { page: 1, size: 50 } }),
           ]);
 
         const newMetrics: Metric[] = [
           {
             title: "Total Admins",
-            value: adminsRes.data.count ?? adminsRes.data.length ?? 0,
+            value: adminsRes.data.total ?? (Array.isArray(adminsRes.data) ? adminsRes.data.length : adminsRes.data.length ?? 0),
             change: "+3",
             changeType: "positive",
             icon: Users,
@@ -64,7 +64,7 @@ const Page: React.FC = () => {
           },
           {
             title: "Colleges",
-            value: collegesRes.data.count ?? collegesRes.data.length ?? 0,
+            value: collegesRes.data.total ?? (Array.isArray(collegesRes.data) ? collegesRes.data.length : collegesRes.data.length ?? 0),
             change: "+2",
             changeType: "positive",
             icon: Building2,
@@ -72,7 +72,7 @@ const Page: React.FC = () => {
           },
           {
             title: "Teachers",
-            value: teachersRes.data.count ?? teachersRes.data.length ?? 0,
+            value: teachersRes.data.total ?? (Array.isArray(teachersRes.data) ? teachersRes.data.length : teachersRes.data.length ?? 0),
             change: "+5",
             changeType: "positive",
             icon: GraduationCap,
@@ -80,7 +80,7 @@ const Page: React.FC = () => {
           },
           {
             title: "Students",
-            value: studentsRes.data.count ?? studentsRes.data.length ?? 0,
+            value: studentsRes.data.total ?? (Array.isArray(studentsRes.data) ? studentsRes.data.length : studentsRes.data.length ?? 0),
             change: "+127",
             changeType: "positive",
             icon: Users,
