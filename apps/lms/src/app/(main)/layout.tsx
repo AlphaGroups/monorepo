@@ -3,11 +3,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, Suspense } from "react";
 import MainLayout from "@/components/Layout/MainLayout";
+import useAuthInterceptor from "@/hooks/useAuthInterceptor";
 
 function AuthChecker({ children }: { children: React.ReactNode }) {
   const { userProfile, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  useAuthInterceptor(); // Add the auth interceptor
 
   useEffect(() => {
     if (!isLoading && !userProfile && pathname !== '/login') {

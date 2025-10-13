@@ -33,9 +33,36 @@ const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
     return [
+      // Proxy /lms/* to the LMS app running on a different port
+      // We remove the /lms prefix when forwarding to avoid double prefixes
       {
         source: "/lms/:path*",
-        destination: `${process.env.NEXT_PUBLIC_LMS_API_URL}/lms/:path*`,
+        destination: `${process.env.LMS_APP_URL}/:path*`, // Note: no /lms in destination
+      },
+    ];
+  },
+  // Enable compression
+  compress: true,
+  
+  // Performance optimization headers
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+        ],
       },
     ];
   },
