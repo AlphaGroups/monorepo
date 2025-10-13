@@ -12,8 +12,8 @@ function AuthChecker({ children }: { children: React.ReactNode }) {
   useAuthInterceptor(); // Add the auth interceptor
 
   useEffect(() => {
-    if (!isLoading && !userProfile && pathname !== '/login') {
-      router.push("/login");
+    if (!isLoading && !userProfile && !pathname.includes('/login')) {
+      router.push("/lms/login");
     }
   }, [userProfile, isLoading, router, pathname]);
 

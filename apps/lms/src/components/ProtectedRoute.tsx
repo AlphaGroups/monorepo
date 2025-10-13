@@ -16,9 +16,9 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
   useEffect(() => {
     if (!isLoading) {
       if (!userProfile) {
-        router.replace("/login"); // redirect to login
+        router.replace("/lms/login"); // redirect to login with /lms prefix
       } else if (allowedRoles && (!userProfile.role || !allowedRoles.includes(userProfile.role))) {
-        router.replace("/"); // redirect if role not allowed
+        router.replace("/lms"); // redirect if role not allowed with /lms prefix
       }
     }
   }, [userProfile, isLoading, router, allowedRoles]);
