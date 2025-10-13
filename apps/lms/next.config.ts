@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 import { join } from "path";
 
 const nextConfig: NextConfig = {
-  basePath: "/lms", // prefix all routes with /lms
+  // Remove basePath to avoid double prefix issues
+  // basePath: "/lms",
+  
   eslint: {
     ignoreDuringBuilds: true, // disables ESLint errors from breaking the build
   },
@@ -14,6 +16,26 @@ const nextConfig: NextConfig = {
         hostname: "img.youtube.com",
       },
     ],
+  },
+  // Add asset prefix for proper asset loading when proxied
+  assetPrefix: "/lms",
+  
+  // Performance optimizations
+  compress: true,
+  
+  // Optional: Add headers for security and performance
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+    ];
   },
 };
 
