@@ -1,6 +1,7 @@
 // Service to handle token management and expiration
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthService } from '@/services/auth.service';
+import api from '@/services/api';
 
 // Function to check if token is expired
 export const isTokenExpired = (token: string | null): boolean => {
@@ -43,19 +44,15 @@ export const checkAndRefreshToken = async (): Promise<boolean> => {
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
         try {
-          // Attempt to refresh the token
-          // Note: This implementation assumes your backend has a refresh endpoint
-          const response = await fetch('/api/auth/refresh', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ refreshToken }),
+          // Attempt to refresh the token using the api service
+          const response = await api.post('/auth/refresh', {
+            refresh_token: refreshToken
           });
 
-          if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('accessToken', data.accessToken);
+          if (response.status === 200 && response.data?.access_token) {
+            localStorage.setItem('accessToken', response.data.access_token);
+            // Update the default header for future requests
+            api.defaults.headers.Authorization = `Bearer ${response.data.access_token}`;
             return true; // Token refreshed successfully
           } else {
             // Refresh failed, token is expired
