@@ -271,6 +271,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             className="md:hidden fixed top-20 right-4 p-2 rounded-full bg-background border border-border z-50 shadow-lg"
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
+            style={{ right: 'calc(4% + 1rem)' }} // Better alignment by accounting for the sidebar max-width
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -282,8 +283,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <button
           className={cn(
             "hidden md:block p-2 rounded-full bg-background border border-border fixed top-1/2 transform -translate-y-1/2 z-40 shadow-md transition-all duration-300",
-            sidebarOpen ? "left-[16.5rem]" : "left-4",
-            sidebarCollapsed && "left-[4.5rem]"
+            sidebarOpen && !sidebarCollapsed ? "left-[16.5rem]" : 
+            sidebarOpen && sidebarCollapsed ? "left-[4.5rem]" : 
+            "left-4"
           )}
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -306,8 +308,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <main 
           className={cn(
             "flex-1 transition-all duration-300 ease-in-out p-6",
-            sidebarOpen && !sidebarCollapsed ? "md:ml-64" : "md:ml-0", // Add margin when sidebar is open and not collapsed
-            sidebarCollapsed && "md:ml-16", // Add smaller margin when sidebar is collapsed
+            sidebarOpen && !sidebarCollapsed ? "md:ml-64" : sidebarOpen && sidebarCollapsed ? "md:ml-16" : "md:ml-0", // Add margin when sidebar is open based on its collapsed state
             "overflow-y-auto relative" // Enable scrolling only for main content and add relative positioning
           )}
         >
