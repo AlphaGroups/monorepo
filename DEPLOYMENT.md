@@ -23,7 +23,7 @@ This guide explains how to deploy both the Web and LMS applications under a sing
 
 ### 3. Environment Variables
 
-- Updated Web app to use `LMS_APP_URL` instead of `NEXT_PUBLIC_LMS_API_URL`
+- Updated Web app to use `NEXT_PUBLIC_LMS_API_URL` instead of `NEXT_PUBLIC_LMS_API_URL`
 - This makes the variable internal to the proxy, not exposed to the client
 
 ## Deployment Process
@@ -140,7 +140,7 @@ server {
 
 1. **Assets not loading in LMS app**: Check that `assetPrefix: "/lms"` is set in LMS config
 2. **API calls failing**: Ensure both apps use the same API endpoints in environment variables
-3. **Proxy not working**: Verify that `LMS_APP_URL` points to the correct internal service
+3. **Proxy not working**: Verify that `NEXT_PUBLIC_LMS_API_URL` points to the correct internal service
 
 ### Testing the Setup
 

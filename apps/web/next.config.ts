@@ -37,7 +37,7 @@ const nextConfig = {
       // Since the LMS app has basePath="/lms", we need to include the /lms prefix in destination
       {
         source: "/lms/:path*",
-        destination: `${process.env.LMS_APP_URL}/lms/:path*`, 
+        destination: `${process.env.NEXT_PUBLIC_LMS_API_URL || "http://localhost:4000"}/lms/:path*`, 
       },
     ];
   },
