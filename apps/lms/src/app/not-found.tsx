@@ -19,12 +19,13 @@ function NotFoundContent() {
 
   const handleReturnHome = () => {
     if (userProfile && userProfile.role) {
-      // If user is authenticated, redirect to their dashboard
+      // If user is authenticated, redirect to their dashboard with /lms prefix
       const dashboard = roleDashboards[userProfile.role as keyof typeof roleDashboards] || "/";
-      router.push(dashboard);
+      const prefixedDashboard = `/lms${dashboard}`;
+      router.push(prefixedDashboard);
     } else {
-      // If user is not authenticated, redirect to login
-      router.push("/login");
+      // If user is not authenticated, redirect to login with /lms prefix
+      router.push("/lms/login");
     }
   };
 

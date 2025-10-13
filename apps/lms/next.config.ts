@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import { join } from "path";
 
 const nextConfig: NextConfig = {
-  // Remove basePath to avoid double prefix issues
+  // Remove basePath to avoid issues with proxy setup
   // basePath: "/lms",
   
   eslint: {
@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Add asset prefix for proper asset loading when proxied
+  // Asset prefix for proper loading under proxy
   assetPrefix: "/lms",
   
   // Performance optimizations
