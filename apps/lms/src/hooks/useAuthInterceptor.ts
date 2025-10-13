@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthService } from '@/services/auth.service';
+import api from '@/services/api';
 import { isTokenExpired, checkAndRefreshToken } from '@/services/token.service';
 
 // Custom hook to handle authentication interception
@@ -11,7 +12,7 @@ const useAuthInterceptor = () => {
 
   useEffect(() => {
     // Create an interceptor for API calls
-    const interceptor = AuthService.axiosInstance.interceptors.response.use(
+    const interceptor = api.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response?.status === 401) {
@@ -25,7 +26,7 @@ const useAuthInterceptor = () => {
 
     // Cleanup interceptor on unmount
     return () => {
-      AuthService.axiosInstance.interceptors.response.eject(interceptor);
+      api.interceptors.response.eject(interceptor);
     };
   }, [logout, router]);
 
