@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 import { join } from "path";
 
 const nextConfig: NextConfig = {
-  // Remove basePath to avoid issues with proxy setup
-  // basePath: "/lms",
+  // Add basePath to ensure all routes are automatically prefixed with /lms
+  basePath: "/lms",
   
   eslint: {
     ignoreDuringBuilds: true, // disables ESLint errors from breaking the build
@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Asset prefix for proper loading under proxy
+  // Asset prefix for proper loading under proxy  
   assetPrefix: "/lms",
   
   // Performance optimizations

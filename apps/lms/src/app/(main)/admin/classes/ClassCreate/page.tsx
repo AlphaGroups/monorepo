@@ -417,7 +417,7 @@ export default function ClassCreate() {
 
       if (response.ok) {
         toast.success("Class created successfully!");
-        router.push("/admin/classes/list");
+        router.push("/admin/classes/list"); // basePath will add /lms/ prefix
       } else {
         toast.error("Failed to create class. Please try again.");
       }

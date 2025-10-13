@@ -83,16 +83,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Role-based redirection - ensure profile and role exist
       if (profile && profile.role) {
-        // Add /lms/ prefix to dashboard routes to ensure they work under the subdirectory
         const dashboard = roleDashboards[profile.role] || "/";
-        const prefixedDashboard = dashboard.startsWith("/") && !dashboard.startsWith("/lms/") 
-          ? `/lms${dashboard}` 
-          : dashboard;
         // Navigate immediately to prevent delays
-        router.replace(prefixedDashboard); // Using replace instead of push to avoid back button issues
+        // basePath will handle prefixing with /lms/
+        router.replace(dashboard); // Using replace instead of push to avoid back button issues
       } else {
-        // Fallback if role is missing - ensure it goes to lms home
-        router.replace("/lms");
+        // Fallback if role is missing
+        router.replace("/");
       }
     } catch (error) {
       // Reset loading on error

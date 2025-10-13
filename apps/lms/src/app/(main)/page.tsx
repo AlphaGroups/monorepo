@@ -41,22 +41,22 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (userProfile) {
-      // Redirect based on user role
+      // Redirect based on user role - basePath will add /lms/ prefix
       switch (userProfile.role) {
         case "superadmin":
-          router.replace("/admin/dashboard");
+          router.replace("/admin/dashboard"); // basePath will add /lms/
           break;
         case "admin":
-          router.replace("/dashboards/admin");
+          router.replace("/dashboards/admin"); // basePath will add /lms/
           break;
         case "teacher":
-          router.replace("/dashboards/teacher");
+          router.replace("/dashboards/teacher"); // basePath will add /lms/
           break;
         case "student":
-          router.replace("/dashboards/student");
+          router.replace("/dashboards/student"); // basePath will add /lms/
           break;
         default:
-          router.replace("/");
+          router.replace("/"); // basePath will add /lms/
       }
     }
   }, [userProfile, router]);
