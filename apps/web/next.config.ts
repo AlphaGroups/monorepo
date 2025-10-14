@@ -34,10 +34,10 @@ const nextConfig = {
   async rewrites() {
     return [
       // Proxy /lms/* to the LMS app running on a different port
-      // We remove the /lms prefix when forwarding to avoid double prefixes
+      // Since the LMS app has basePath="/lms", we need to include the /lms prefix in destination
       {
         source: "/lms/:path*",
-        destination: `${process.env.LMS_APP_URL}/:path*`, // Note: no /lms in destination
+        destination: `${process.env.NEXT_PUBLIC_LMS_API_URL || "http://localhost:4000"}/lms/:path*`, 
       },
     ];
   },

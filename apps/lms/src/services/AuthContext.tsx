@@ -26,19 +26,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // 🚀 Redirect based on role
           switch (profile.role) {
             case "superadmin":
-              router.replace("/admin/dashboard");
+              router.replace("/admin/dashboard"); // basePath will add /lms/
               break;
             case "admin":
-              router.replace("/admin/college-dashboard");
+              router.replace("/admin/college-dashboard"); // basePath will add /lms/
               break;
             case "teacher":
-              router.replace("/class/dashboard");
+              router.replace("/class/dashboard"); // basePath will add /lms/
               break;
             case "student":
-              router.replace("/student/dashboard");
+              router.replace("/student/dashboard"); // basePath will add /lms/
               break;
             default:
-              router.replace("/");
+              router.replace("/"); // basePath will add /lms/
           }
         })
         .catch(() => {

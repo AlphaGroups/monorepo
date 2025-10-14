@@ -187,14 +187,30 @@ export default function AdminManagement() {
   };
 
   useEffect(() => {
-    fetchAdmins();
-    fetchColleges();
-    fetchClasses();
+    // Only fetch data based on URL parameters to optimize loading
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    
+    // If the user is specifically adding an admin, we can optimize loading
+    if (action === 'add') {
+      fetchColleges(); // Only fetch colleges for the form
+      fetchClasses(); // Fetch classes for access management
+      setAdmins([]); // Initialize with empty admins to reduce initial load
+    } else {
+      // Default behavior: fetch all data for full page view
+      fetchAdmins();
+      fetchColleges();
+      fetchClasses();
+    }
   }, []);
 
   // Load admin access data whenever admins change
   useEffect(() => {
-    if (admins.length > 0) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    
+    // Only load access data if not in add mode
+    if (action !== 'add' && admins.length > 0) {
       loadAdminAccessData();
     }
   }, [admins]);
@@ -337,12 +353,12 @@ export default function AdminManagement() {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50">
+      <Card className="bg-card text-card-foreground border border-border">
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-muted">
           <div>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <UserCog className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <UserCog className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-2xl font-bold">Admin Management</CardTitle>
@@ -368,7 +384,7 @@ export default function AdminManagement() {
                   <Plus className="mr-2 h-4 w-4" /> Add Admin
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
+              <DialogContent className="sm:max-w-md bg-background text-foreground border border-border">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
                     {editingAdmin ? <Pencil className="h-5 w-5" /> : <UserCog className="h-5 w-5" />}
@@ -378,7 +394,7 @@ export default function AdminManagement() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <div>
                     <Label>Name</Label>
-                    <Input {...form.register("name")} />
+                    <Input {...form.register("name")} className="bg-background border-input" />
                     {form.formState.errors.name && (
                       <p className="text-red-500 text-sm mt-1">
                         {form.formState.errors.name.message}
@@ -387,7 +403,7 @@ export default function AdminManagement() {
                   </div>
                   <div>
                     <Label>Email</Label>
-                    <Input {...form.register("email")} />
+                    <Input {...form.register("email")} className="bg-background border-input" />
                     {form.formState.errors.email && (
                       <p className="text-red-500 text-sm mt-1">
                         {form.formState.errors.email.message}
@@ -396,7 +412,7 @@ export default function AdminManagement() {
                   </div>
                   <div>
                     <Label>Mobile</Label>
-                    <Input {...form.register("mobile")} />
+                    <Input {...form.register("mobile")} className="bg-background border-input" />
                     {form.formState.errors.mobile && (
                       <p className="text-red-500 text-sm mt-1">
                         {form.formState.errors.mobile.message}
@@ -405,7 +421,7 @@ export default function AdminManagement() {
                   </div>
                   <div>
                     <Label>Password</Label>
-                    <Input type="password" {...form.register("password")} />
+                    <Input type="password" {...form.register("password")} className="bg-background border-input" />
                     {form.formState.errors.password && (
                       <p className="text-red-500 text-sm mt-1">
                         {form.formState.errors.password.message}
@@ -414,7 +430,7 @@ export default function AdminManagement() {
                   </div>
                   <div>
                     <Label>College</Label>
-                    <Command>
+                    <Command className="bg-background border border-input rounded-md">
                       <CommandInput
                         placeholder="Search or enter new college..."
                         value={form.watch("collegeId")}
@@ -478,10 +494,10 @@ export default function AdminManagement() {
         </CardHeader>
 
         <CardContent>
-          <div className="rounded-md border">
+          <div className="rounded-md border border-border">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-100">
+                <TableRow className="bg-muted">
                   <TableHead className="font-semibold">Name</TableHead>
                   <TableHead className="font-semibold">Email</TableHead>
                   <TableHead className="font-semibold">Mobile</TableHead>
@@ -493,11 +509,11 @@ export default function AdminManagement() {
               <TableBody>
                 {filteredAdmins.length > 0 ? (
                   filteredAdmins.map((admin) => (
-                    <TableRow key={admin.id} className="hover:bg-gray-50">
+                    <TableRow key={admin.id} className="hover:bg-accent hover:text-accent-foreground">
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                            <span className="text-blue-800 font-medium text-sm">
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <span className="text-primary font-medium text-sm">
                               {admin.full_name.split(' ').map(n => n[0]).join('')}
                             </span>
                           </div>
@@ -507,7 +523,7 @@ export default function AdminManagement() {
                       <TableCell className="text-muted-foreground">{admin.email}</TableCell>
                       <TableCell className="text-muted-foreground">{admin.mobile}</TableCell>
                       <TableCell>
-                        <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                        <span className="bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5 rounded">
                           {admin.college_name}
                         </span>
                       </TableCell>
@@ -517,9 +533,9 @@ export default function AdminManagement() {
                           {adminAccess[admin.id] && adminAccess[admin.id].length > 0 ? (
                             <div className="space-y-1">
                               {adminAccess[admin.id].map((access) => (
-                                <div key={access.id} className="flex justify-between items-center bg-blue-50 p-2 rounded-lg">
+                                <div key={access.id} className="flex justify-between items-center bg-accent p-2 rounded-lg">
                                   <div className="flex items-center gap-2">
-                                    <GraduationCap className="h-4 w-4 text-blue-500" />
+                                    <GraduationCap className="h-4 w-4 text-primary" />
                                     <span className="text-sm">
                                       <span className="font-medium">{access.code}</span> - {access.name}
                                     </span>
@@ -534,7 +550,7 @@ export default function AdminManagement() {
                                     {loadingStates[`revoke_${admin.id}_${access.id}`] ? (
                                       <span className="h-4 w-4" />
                                     ) : (
-                                      <X className="h-4 w-4 text-red-500" />
+                                      <X className="h-4 w-4 text-destructive" />
                                     )}
                                   </Button>
                                 </div>
@@ -604,7 +620,7 @@ export default function AdminManagement() {
                                 variant="outline"
                                 onClick={() => handleRevokeAllAccess(admin.id, admin.full_name)}
                                 disabled={loadingStates[`revoke_all_${admin.id}`]}
-                                className="h-8 text-xs border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                                className="h-8 text-xs text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
                               >
                                 {loadingStates[`revoke_all_${admin.id}`] ? (
                                   <span>Revoking...</span>
@@ -623,7 +639,7 @@ export default function AdminManagement() {
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="bg-background border border-border">
                             <DropdownMenuItem 
                               onClick={() => {
                                 setEditingAdmin(admin);
@@ -665,7 +681,7 @@ export default function AdminManagement() {
           </div>
 
           {admins.length > 0 && (
-            <div className="flex items-center justify-between p-4 border-t">
+            <div className="flex items-center justify-between p-4 border-t border-border">
               <p className="text-sm text-muted-foreground">
                 Showing <span className="font-medium">{filteredAdmins.length}</span> of{" "}
                 <span className="font-medium">{admins.length}</span> admin{admins.length !== 1 ? 's' : ''}

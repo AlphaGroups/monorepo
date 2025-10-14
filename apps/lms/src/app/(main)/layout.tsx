@@ -13,7 +13,7 @@ function AuthChecker({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !userProfile && !pathname.includes('/login')) {
-      router.push("/lms/login");
+      router.push("/login"); // basePath will add /lms/ prefix
     }
   }, [userProfile, isLoading, router, pathname]);
 

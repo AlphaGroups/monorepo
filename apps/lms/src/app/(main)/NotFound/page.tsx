@@ -28,13 +28,14 @@ const NotFound = () => {
 
   const handleReturnHome = () => {
     if (userProfile && userProfile.role) {
-      // If user is authenticated, redirect to their dashboard with /lms prefix
+      // If user is authenticated, redirect to their dashboard
       const dashboard = roleDashboards[userProfile.role as keyof typeof roleDashboards] || "/";
-      const prefixedDashboard = `/lms${dashboard}`;
-      router.push(prefixedDashboard);
+      // basePath will handle prefixing with /lms/
+      router.push(dashboard);
     } else {
-      // If user is not authenticated, redirect to login with /lms prefix
-      router.push("/lms/login");
+      // If user is not authenticated, redirect to login
+      // basePath will handle prefixing with /lms/
+      router.push("/login");
     }
   };
 

@@ -1,14 +1,15 @@
 import "./globals.css";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LayoutProvider } from "@/components/Layout/LayoutProvider";
 import { GlobalLoaderProvider } from "@/components/GlobalLoader";
+import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { Suspense } from "react";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const inter = Inter({ 
+  variable: "--font-inter", 
+  subsets: ["latin"], 
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -17,15 +18,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
       >
-        <Suspense fallback={null}>
-          <GlobalLoaderProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </GlobalLoaderProvider>
-        </Suspense>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Suspense fallback={null}>
+            <GlobalLoaderProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </GlobalLoaderProvider>
+          </Suspense>
+        </ThemeProvider>
       </body>
     </html>
   );
