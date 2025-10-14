@@ -292,6 +292,15 @@
   }
 }
 
+  /* Disable theme transition */
+  .disable-theme-transition,
+  .disable-theme-transition *,
+  .disable-theme-transition *:before,
+  .disable-theme-transition *:after {
+    transition: none !important;
+    animation: none !important;
+  }
+
 @layer components {
   /* Custom gradient definitions */
   .bg-gradient-primary {

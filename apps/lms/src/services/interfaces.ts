@@ -36,6 +36,8 @@ export interface UserProfile {
   email: string;
   role: UserRole;
   mobile: string;
+  avatar?: string;
+  created_at?: string;
 }
 
 // services/admin.ts
