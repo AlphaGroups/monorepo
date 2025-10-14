@@ -30,7 +30,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {UserProfile} from "@/services/interfaces"
+import { UserProfile } from "@/services/interfaces";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -39,8 +39,6 @@ interface SidebarProps {
 
   userRole?: UserRole;
   onClose?: any;
-
-
 }
 
 interface NavigationItem {
@@ -81,26 +79,15 @@ const NavItemComponent = React.memo(
           open={isGroupOpen}
           onOpenChange={(open) => toggleGroup(item.title)}
         >
-          {/* <CollapsibleTrigger asChild>
-          <Button className="w-full justify-start px-3">
-            <item.icon className="mr-3 h-4 w-4" />
-            {!isCollapsed && (
-              <>
-                <span className="flex-1 text-left">{item.title}</span>
-                {item.badge && <Badge className="ml-2">{item.badge}</Badge>}
-                {isGroupOpen ? (
-                  <ChevronDown className="ml-2 h-4 w-4" />
-                ) : (
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                )}
-              </>
-            )}
-          </Button>
-        </CollapsibleTrigger> */}
           <CollapsibleTrigger asChild>
             <Button
-              variant="outline" // ✅ ensures default blue style
-              className="w-full justify-start px-3"
+              variant="ghost"
+              className={cn(
+                "w-full justify-start px-3 py-2 text-sm rounded-md transition-colors",
+                isGroupOpen
+                  ? "text-foreground"
+                  : "hover:bg-accent hover:text-accent-foreground"
+              )}
             >
               <item.icon className="mr-3 h-4 w-4" />
               {!isCollapsed && (
@@ -132,8 +119,8 @@ const NavItemComponent = React.memo(
                   className={cn(
                     "flex items-center px-3 py-2 text-sm rounded-md transition-colors mt-2",
                     isActiveLink(child.href)
-                      ? "bg-gray-50 text-gray-700"
-                      : "hover:bg-blue-200 hover:text-gray-500"
+                      ? "bg-accent text-accent-foreground"
+                      : "hover:bg-accent hover:text-accent-foreground"
                   )}
                 >
                   <child.icon className="mr-3 h-4 w-4" />

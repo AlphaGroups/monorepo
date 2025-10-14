@@ -175,11 +175,11 @@ const ClassUserManagement = () => {
           <GraduationCap className="w-6 h-6" /> Teacher Management
         </h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
+          {/* <DialogTrigger asChild>
             <Button onClick={() => setEditingTeacher(null)}>
               <Plus className="w-4 h-4 mr-2" /> Add Teacher
             </Button>
-          </DialogTrigger>
+          </DialogTrigger> */}
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>

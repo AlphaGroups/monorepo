@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface HeaderProps {
   onToggleSidebar?: () => void;
@@ -142,6 +143,8 @@ const Header = ({
                 3
               </Badge>
             </Button>
+
+            <ThemeToggle />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

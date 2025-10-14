@@ -328,11 +328,11 @@ const StudentManagement = () => {
           </p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline">
+          {/* <Button variant="outline">
             <Upload className="w-4 h-4 mr-2" />
             Bulk Import
-          </Button>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          </Button> */}
+          {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 onClick={() => {
@@ -539,7 +539,7 @@ const StudentManagement = () => {
                 </form>
               </Form>
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
         </div>
       </div>
 
