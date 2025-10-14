@@ -98,10 +98,10 @@ export default function Page() {
             const res = await api.get(path, {
               params: {
                 page: 1,
-                size: 50
-              }
+                size: 50,
+              },
             });
-            
+
             // Handle both direct array responses and paginated responses
             if (Array.isArray(res.data)) {
               return res.data;
@@ -351,7 +351,7 @@ export default function Page() {
             </Dialog>
 
             {/* Student Modal */}
-            <Dialog>
+            {/* <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline">
                   <Plus className="mr-2 h-4 w-4" />
@@ -441,7 +441,7 @@ export default function Page() {
                   </Button>
                 </div>
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
 
             {/* Bulk Upload */}
             <Dialog>

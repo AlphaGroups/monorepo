@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, Suspense } from "react";
 import {
   Card,
@@ -23,6 +22,7 @@ import {
   Server,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { useRouter } from "next/navigation";
 
 interface Metric {
   title: string;
@@ -40,6 +40,8 @@ const Page: React.FC = () => {
   const [stats, setStats] = useState<Metric[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
   const [health, setHealth] = useState<any[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -107,7 +109,7 @@ const Page: React.FC = () => {
     <Suspense
       fallback={
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-300"></div>
         </div>
       }
     >
@@ -136,11 +138,11 @@ const Page: React.FC = () => {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {loading ? (
             <div className="col-span-full flex justify-center items-center py-10">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-300"></div>
             </div>
           ) : (
             metrics.map((metric, idx) => (
-              <Card key={idx} className="hover-lift card-elegant">
+              <Card key={idx} className="hover-lift bg-card text-card-foreground border border-border">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
                   <metric.icon className="h-4 w-4 text-muted-foreground" />
@@ -164,7 +166,7 @@ const Page: React.FC = () => {
 
         {/* Activity & Health */}
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="card-elegant">
+          <Card className="bg-card text-card-foreground border border-border">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Activity className="mr-2 h-5 w-5" />
@@ -179,7 +181,7 @@ const Page: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="card-elegant">
+          <Card className="bg-card text-card-foreground border border-border">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Server className="mr-2 h-5 w-5" />
@@ -196,18 +198,26 @@ const Page: React.FC = () => {
         </div>
 
         {/* Quick Actions */}
-        <Card className="card-elegant">
+        <Card className="bg-card text-card-foreground border border-border">
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
             <CardDescription>Common administrative tasks</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Button variant="outline" className="h-20 flex-col">
+              <Button 
+                variant="outline" 
+                className="h-20 flex-col"
+                onClick={() => router.push('/admin/users/AdminManagement?action=add')}
+              >
                 <Plus className="h-6 w-6 mb-2" />
                 Add Admin
               </Button>
-              <Button variant="outline" className="h-20 flex-col">
+              <Button 
+                variant="outline" 
+                className="h-20 flex-col"
+                onClick={() => router.push('/admin/content/videos?uploadOnly=true')}
+              >
                 <Video className="h-6 w-6 mb-2" />
                 Upload Video
               </Button>
