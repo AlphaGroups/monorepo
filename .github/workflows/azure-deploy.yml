@@ -1,0 +1,86 @@
+name: Deploy LMS & Web to Azure App Service
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: 20.x
+
+jobs:
+  build-and-deploy-lms:
+    name: Build & Deploy LMS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Dependencies
+        working-directory: ./apps/lms
+        run: |
+          if [ -f yarn.lock ]; then yarn install --frozen-lockfile; else npm ci; fi
+
+      - name: Build LMS App
+        working-directory: ./apps/lms
+        run: npm run build
+
+      - name: Package LMS for Deployment
+        working-directory: ./apps/lms
+        run: |
+          mkdir -p artifact
+          cp package.json artifact/
+          cp -r .next artifact/.next
+          cp -r public artifact/public
+          cp -r node_modules artifact/node_modules || true
+          cd artifact && zip -r ../lms-artifact.zip .
+
+      - name: Deploy LMS to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: alpha-lms-app
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE_LMS }}
+          package: ./apps/lms/lms-artifact.zip
+
+  build-and-deploy-web:
+    name: Build & Deploy Web
+    runs-on: ubuntu-latest
+    needs: build-and-deploy-lms
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Dependencies
+        working-directory: ./apps/web
+        run: |
+          if [ -f yarn.lock ]; then yarn install --frozen-lockfile; else npm ci; fi
+
+      - name: Build Web App
+        working-directory: ./apps/web
+        run: npm run build
+
+      - name: Package Web for Deployment
+        working-directory: ./apps/web
+        run: |
+          mkdir -p artifact
+          cp package.json artifact/
+          cp -r .next artifact/.next
+          cp -r public artifact/public
+          cp -r node_modules artifact/node_modules || true
+          cd artifact && zip -r ../web-artifact.zip .
+
+      - name: Deploy Web to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: alpha-web-app
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE_WEB }}
+          package: ./apps/web/web-artifact.zip
