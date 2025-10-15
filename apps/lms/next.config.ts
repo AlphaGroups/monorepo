@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 import { join } from "path";
 
 const nextConfig: NextConfig = {
-  // Add basePath to ensure all routes are automatically prefixed with /lms
-  basePath: "/lms",
+  // Use basePath only in development to avoid issues when deployed as standalone app
+  basePath: process.env.NODE_ENV === 'development' ? "/lms" : "",
   
   eslint: {
     ignoreDuringBuilds: true, // disables ESLint errors from breaking the build
@@ -17,8 +17,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Asset prefix for proper loading under proxy  
-  assetPrefix: "/lms",
+  // Use assetPrefix conditionally as well
+  assetPrefix: process.env.NODE_ENV === 'development' ? "/lms" : "",
   
   // Performance optimizations
   compress: true,
