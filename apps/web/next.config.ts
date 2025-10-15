@@ -4,6 +4,9 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   reactStrictMode: true,
+  
+  // This setup is for hybrid Next.js deployment (not static export)
+  // to work with Azure Static Web Apps
   async rewrites() {
     return [
       // Proxy /lms/* to the LMS app running on a different port
