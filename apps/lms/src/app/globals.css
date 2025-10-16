@@ -340,6 +340,10 @@
     box-shadow: 0 0 20px oklch(0.21 0.034 264.665 / 0.25);
   }
   
+  .dark .shadow-custom-glow {
+    box-shadow: 0 0 20px oklch(0.6 0.118 184.704 / 0.4);
+  }
+  
   /* Progress bar animations */
   .progress-bar {
     transition: width 250ms ease-in-out;
@@ -365,6 +369,17 @@
   
   .card-elegant:hover {
     box-shadow: 0 4px 6px -1px oklch(0.928 0.006 264.531 / 0.1), 0 2px 4px -1px oklch(0.928 0.006 264.531 / 0.06);
+    transform: translateY(-1px);
+  }
+  
+  .dark .card-elegant {
+    background: linear-gradient(145deg, oklch(0.21 0.034 264.665) 0%, oklch(0.18 0.03 264.665) 100%);
+    border: 1px solid oklch(0.3 0.02 264.665);
+    box-shadow: 0 4px 6px -1px oklch(0.2 0.02 264.665 / 0.2), 0 2px 4px -1px oklch(0.2 0.02 264.665 / 0.1);
+  }
+  
+  .dark .card-elegant:hover {
+    box-shadow: 0 10px 15px -3px oklch(0.2 0.02 264.665 / 0.3), 0 4px 6px -2px oklch(0.2 0.02 264.665 / 0.2);
     transform: translateY(-1px);
   }
   

@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -44,19 +43,19 @@ function LoginPageContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-hero p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-hero p-4 dark:bg-gradient-hero">
       <div className="w-full max-w-md">
-        <Card className="card-elegant">
+        <Card className="card-elegant dark:card-elegant-dark">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-gradient-primary rounded-full shadow-custom-glow">
+              <div className="p-3 bg-gradient-primary rounded-full shadow-custom-glow dark:shadow-custom-glow-dark">
                 <GraduationCap className="h-8 w-8 text-primary-foreground" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-heading font-semibold">
+            <CardTitle className="text-2xl font-heading font-semibold dark:text-white">
               Welcome to EduPlatform
             </CardTitle>
-            <CardDescription className="text-muted-foreground">
+            <CardDescription className="text-muted-foreground dark:text-gray-300">
               Sign in to access your learning dashboard
             </CardDescription>
           </CardHeader>
@@ -68,18 +67,18 @@ function LoginPageContent() {
 
               {/* Email */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
+                <Label htmlFor="email" className="text-sm font-medium dark:text-gray-200">
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground dark:text-gray-400" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                     required
                     autoComplete="username"
                   />
@@ -88,18 +87,18 @@ function LoginPageContent() {
 
               {/* Password */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
+                <Label htmlFor="password" className="text-sm font-medium dark:text-gray-200">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground dark:text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-10 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                     required
                     autoComplete="current-password"
                   />
@@ -107,13 +106,13 @@ function LoginPageContent() {
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-2 top-2 h-7 w-7 p-0"
+                    className="absolute right-2 top-2 h-7 w-7 p-0 dark:text-gray-400"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground dark:text-gray-400" />
                     ) : (
-                      <Eye className="h-4 w-4" />
+                      <Eye className="h-4 w-4 text-muted-foreground dark:text-gray-400" />
                     )}
                   </Button>
                 </div>
@@ -128,12 +127,13 @@ function LoginPageContent() {
                     onCheckedChange={(checked) =>
                       setRememberMe(checked as boolean)
                     }
+                    className="dark:border-gray-600"
                   />
-                  <Label htmlFor="remember" className="text-sm">
+                  <Label htmlFor="remember" className="text-sm dark:text-gray-300">
                     Remember me
                   </Label>
                 </div>
-                <Button variant="link" className="p-0 h-auto text-sm">
+                <Button variant="link" className="p-0 h-auto text-sm dark:text-blue-400">
                   Forgot password?
                 </Button>
               </div>
@@ -142,7 +142,7 @@ function LoginPageContent() {
             <CardFooter className="flex flex-col space-y-4">
               <Button
                 type="submit"
-                className="w-full bg-gradient-primary hover:shadow-custom-glow transition-all duration-normal"
+                className="w-full bg-gradient-primary hover:shadow-custom-glow transition-all duration-normal dark:hover:shadow-custom-glow-dark"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -169,8 +169,8 @@ function LoginPage() {
   return (
     <Suspense 
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-hero p-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-hero p-4 dark:bg-gradient-hero">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100"></div>
         </div>
       }
     >
