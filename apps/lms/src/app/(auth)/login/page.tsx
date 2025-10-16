@@ -139,7 +139,7 @@ function LoginPageContent() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex flex-col space-y-4">
+            <CardFooter className="flex flex-col space-y-4 mt-4">
               <Button
                 type="submit"
                 className="w-full bg-gradient-primary hover:shadow-custom-glow transition-all duration-normal dark:hover:shadow-custom-glow-dark"
