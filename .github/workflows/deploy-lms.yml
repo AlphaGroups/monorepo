@@ -23,6 +23,6 @@ jobs:
       - name: Deploy LMS to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "YOUR_LMS_APP_SERVICE_NAME"   # e.g. alpha-lms-app
+          app-name: "alpha-lms"   # Using recommended name from deployment guide
           publish-profile: ${{ secrets.AZURE_LMS_PUBLISH_PROFILE }}
           package: apps/lms
