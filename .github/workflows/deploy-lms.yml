@@ -1,36 +1,35 @@
-name: Deploy LMS to Azure App Service
+name: Deploy LMS App to Azure
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main  # or your production branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up Node.js (match Azure runtime)
-      - name: Setup Node.js
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: 20
 
-      # 3️⃣ Install dependencies and build LMS app
-      - name: Install and build LMS
-        run: |
-          yarn install --frozen-lockfile
-          yarn build:lms
-        env:
-          CI: true
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-      # 4️⃣ Deploy to Azure App Service
-      - name: Deploy LMS to Azure
+      - name: Build Next.js app
+        run: yarn build
+
+      - name: Zip build artifacts
+        run: zip -r release.zip .next node_modules package.json yarn.lock
+
+      - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "alpha-lms-app" # ✅ must match Azure name exactly
-          publish-profile: ${{ secrets.AZURE_LMS_PUBLISH_PROFILE }}
-          package: "apps/lms"
+          app-name: alpha-lms-app
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: ./release.zip
