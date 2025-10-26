@@ -3,13 +3,12 @@ name: Deploy LMS App to Azure
 on:
   push:
     branches:
-      - main  # or your production branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    # Run all commands from apps/lms
     defaults:
       run:
         working-directory: apps/lms
@@ -33,14 +32,17 @@ jobs:
       - name: Verify build output
         run: ls -la .next
 
-      # 👇 Do NOT include node_modules (Azure will install them)
       - name: Zip build artifacts
         run: |
-          zip -r ../../release.zip .next package.json yarn.lock public next.config.* tsconfig.* .env.production
+          # create release.zip at repo root
+          zip -r ../../release.zip .next package.json yarn.lock public next.config.* tsconfig.*
+
+      - name: Show artifact content
+        run: unzip -l ../../release.zip
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
           app-name: alpha-lms-app
           publish-profile: ${{ secrets.AZURE_LMS_PUBLISH_PROFILE }}
-          package: ./release.zip
+          package: ../../release.zip
