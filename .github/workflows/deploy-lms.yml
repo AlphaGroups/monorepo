@@ -1,3 +1,4 @@
+
 name: Deploy LMS App to Azure
 
 on:
@@ -9,23 +10,33 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    # 👇 This ensures all yarn commands run inside apps/lms
+    defaults:
+      run:
+        working-directory: apps/lms
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build Next.js app
+      - name: Build Next.js LMS app
         run: yarn build
 
+      - name: List build output
+        run: ls -la .next
+
       - name: Zip build artifacts
-        run: zip -r release.zip .next node_modules package.json yarn.lock
+        run: |
+          zip -r ../../release.zip .next node_modules package.json yarn.lock public next.config.* tsconfig.* .env.production
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
