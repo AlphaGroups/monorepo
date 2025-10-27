@@ -1,65 +1,54 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App - alpha-web-app
+name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches: [ main ]
 
 jobs:
-  build:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    permissions:
-      contents: read #This is required for actions/checkout
-
+    name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: 18
 
-      - name: npm install, build, and test
+      - name: Install dependencies (root, optional for workspaces)
+        run: yarn install --frozen-lockfile
+
+      - name: Install app dependencies
+        working-directory: ./apps/web
+        run: yarn install --frozen-lockfile
+
+      - name: Build and export Next.js app
+        working-directory: ./apps/web
+        # your apps/web/package.json "build" should run: next build && next export
+        run: yarn build
+
+      - name: Copy staticwebapp config into exported out (if present)
         run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          if [ -f ./apps/web/staticwebapp.config.json ]; then
+            cp ./apps/web/staticwebapp.config.json ./apps/web/out/
+          fi
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-app
-          path: .
+      - name: Show exported files (debug)
+        run: ls -la ./apps/web/out || true
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          name: node-app
-      
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4256C44B8AF9425EB7A743611DDCD53A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_21111ED61ACB418BBF033683B7855A09 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FFF22D78E3074FCDB7DD4FBCD552B8A2 }}
-
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'alpha-web-app'
-          slot-name: 'Production'
-          package: .
-          
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }} # <- use your repo secret name
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "apps/web"   # path to the app folder in the monorepo (no leading slash)
+          output_location: "out"     # relative to app_location, where next export wrote index.html
+          is_static_export: true
+          skip_app_build: true
