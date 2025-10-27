@@ -2,12 +2,10 @@ name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build_and_deploy_job:
@@ -23,22 +21,34 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
+      - name: Install dependencies (root, optional for workspaces)
+        run: yarn install --frozen-lockfile
+
+      - name: Install app dependencies
+        working-directory: ./apps/web
         run: yarn install --frozen-lockfile
 
       - name: Build and export Next.js app
+        working-directory: ./apps/web
+        # your apps/web/package.json "build" should run: next build && next export
+        run: yarn build
+
+      - name: Copy staticwebapp config into exported out (if present)
         run: |
-          # The root package.json has a build script that builds both web and lms
-          # but we only need the web app for this deployment
-          cd apps/web
-          yarn build
+          if [ -f ./apps/web/staticwebapp.config.json ]; then
+            cp ./apps/web/staticwebapp.config.json ./apps/web/out/
+          fi
+
+      - name: Show exported files (debug)
+        run: ls -la ./apps/web/out || true
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }} # <- use your repo secret name
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/apps/web"         # point to the app source code directory
-          output_location: "out"          # specify the output directory relative to app_location
-          is_static_export: true       # <<-- flag that this is a Next static export
+          app_location: "apps/web"   # path to the app folder in the monorepo (no leading slash)
+          output_location: "out"     # relative to app_location, where next export wrote index.html
+          is_static_export: true
+          skip_app_build: true
