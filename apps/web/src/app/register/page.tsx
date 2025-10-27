@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { registerUser } from "@/services/api";
+import { registerUser } from "@/lib/api";
 import { Eye, EyeOff } from "lucide-react";
 
 const RegisterPage = () => {

@@ -3,7 +3,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Target, Heart, Lightbulb, Shield, Globe, Handshake } from 'lucide-react';
 
-
 const About: React.FC = () => {
   const values = [
     {
@@ -12,7 +11,6 @@ const About: React.FC = () => {
       description: "Every professional on our platform is thoroughly vetted and verified to ensure quality and reliability."
     },
     {
-      
       icon: <Globe className="h-6 w-6" />,
       title: "Local Focus",
       description: "We connect you with local contractors who understand your area and can deliver personalized service."

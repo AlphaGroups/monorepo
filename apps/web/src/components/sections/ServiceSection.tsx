@@ -9,7 +9,6 @@ const ServiceSection = () => {
       icon: Cpu,
       title: "STEM & Robotics Labs",
       description: "Complete lab solutions with IoT modules, Learning Management Systems, and hands-on robotics kits designed for interactive learning.",
-      highlighted: true,
       link: "/stem-labs",
       features: ["IoT Integration", "Custom LMS", "Hands-on Kits", "Teacher Training"]
     },
@@ -17,7 +16,6 @@ const ServiceSection = () => {
       icon: Building,
       title: "Construction Works",
       description: "Purpose-driven infrastructure development including school buildings, WASH facilities, and educational space renovation.",
-      highlighted: false,
       link: "/construction",
       features: ["School Buildings", "WASH Infrastructure", "Renovations", "Self-Execution Model"]
     },
@@ -25,7 +23,6 @@ const ServiceSection = () => {
       icon: Package,
       title: "Bulk Material Supply",
       description: "Large-scale supply of educational materials, school furniture, hygiene kits, and emergency relief supplies.",
-      highlighted: false,
       link: "/bulk-supply",
       features: ["Educational Materials", "School Furniture", "Hygiene Kits", "Emergency Relief"]
     }
@@ -45,37 +42,39 @@ const ServiceSection = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card 
-              key={index} 
-              className={`group hover:shadow-strong transition-all duration-300 hover:-translate-y-2 ${
-                service.highlighted ? 'ring-2 ring-primary shadow-medium' : ''
-              }`}
+            <Card
+              key={index}
+              className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2"
             >
               <CardHeader>
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
-                  service.highlighted ? 'bg-primary text-white' : 'bg-accent text-primary'
-                }`}>
+                {/* Icon */}
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 bg-accent text-primary">
                   <service.icon className="h-6 w-6" />
                 </div>
+                {/* Title + Description */}
                 <CardTitle className="text-xl mb-2">{service.title}</CardTitle>
                 <CardDescription className="text-base leading-relaxed">
                   {service.description}
                 </CardDescription>
               </CardHeader>
-              
               <CardContent className="pt-0">
+                {/* Features List */}
                 <ul className="space-y-2 mb-6">
                   {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-muted-foreground">
+                    <li
+                      key={featureIndex}
+                      className="flex items-center text-sm text-muted-foreground"
+                    >
                       <div className="w-1.5 h-1.5 bg-primary rounded-full mr-3"></div>
                       {feature}
                     </li>
                   ))}
                 </ul>
-                
+
+                {/* CTA Button */}
                 <Link href={service.link}>
-                  <Button 
-                    variant={service.highlighted ? "default" : "outline"} 
+                  <Button
+                    variant="outline"
                     className="w-full group-hover:bg-primary group-hover:text-white transition-colors"
                   >
                     Learn More
@@ -92,3 +91,4 @@ const ServiceSection = () => {
 };
 
 export default ServiceSection;
+

@@ -4,7 +4,7 @@ import React from "react";
 // import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-// src/app/layout.tsx
+// src/app/LayoutParts.tsx
 import '@/app/globals.css';
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import ContactForm from "./ContactForm";
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const LayoutParts: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout } = useAuth();
   // const location = useLocation();
   // const router = useRouter();
@@ -176,4 +176,4 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-export default Layout;
+export default LayoutParts;

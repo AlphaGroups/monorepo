@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,7 +22,17 @@ import {
 import Header from "@/components/LayoutParts/Header";
 import Footer from "@/components/LayoutParts/Footer";
 // import heroImage from "@/assets/hero-stem-robotics.jpeg"; // add your image path here
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 const STEMLabs = () => {
   const features = [
     {
@@ -100,16 +111,58 @@ const STEMLabs = () => {
               management systems.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg px-6 py-3 text-lg">
-                Request Lab Setup
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 text-lg"
-              >
-                View Demo
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg px-6 py-3 text-lg">
+                    Request Lab Setup
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Request Lab Setup</DialogTitle>
+                    <DialogDescription>
+                      Fill in your details below to request a STEM Lab setup.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-2">
+                    <div>
+                      <Label htmlFor="name">Name</Label>
+                      <Input id="name" placeholder="Enter your name" />
+                    </div>
+                    <div>
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="Enter your email"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="password">Password</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="Enter a password"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit" className="w-full">
+                      Submit
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              {/* View All Projects Button with Link */}
+              <Link href="/projects" passHref>
+                <Button
+                  variant="outline"
+                  className="border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 text-lg"
+                >
+                  View All Projects
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -215,12 +268,14 @@ const STEMLabs = () => {
             <Button className="bg-white text-blue-600 hover:bg-gray-200 shadow-md px-6 py-3 text-lg">
               Schedule Consultation
             </Button>
-            <Button
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 text-lg"
-            >
-              Download Brochure
-            </Button>
+           <Link href="/projects" passHref>
+                <Button
+                  variant="outline"
+                  className="border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 text-lg"
+                >
+                  View All Projects
+                </Button>
+              </Link>
           </div>
         </div>
       </section>

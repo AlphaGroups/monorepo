@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { loginUser } from "@/services/api"; // 👈 import API
+import { loginUser } from "@/lib/api"; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const res = await loginUser({ email, password });
-      localStorage.setItem("token", res.accessToken); // save JWT
+      localStorage.setItem("token", res.accessToken);
       setMessage("✅ Login successful!");
     } catch (error) {
       setMessage("❌ Login failed. Check your credentials.");

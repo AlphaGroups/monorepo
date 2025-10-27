@@ -12,21 +12,21 @@ const TestimonialsSection = () => {
       author: "Dr. Priya Sharma",
       position: "Principal",
       organization: "Delhi Public School",
-      // image: "/lovable-uploads/93211eb5-6cd5-477d-858a-83e8f55e73ef.png"
+      image: "https://tse3.mm.bing.net/th/id/OIP.vKHdWEntpqxd4GXRAqM5ngHaHy?pid=Api&P=0&h=180"
     },
     {
       quote: "Working with Alpha Groups on our school construction project was seamless. Their self-execution model ensured quality and timely delivery.",
       author: "Rajesh Kumar",
       position: "CSR Head",
       organization: "L&T Foundation",
-      // image: "/lovable-uploads/93211eb5-6cd5-477d-858a-83e8f55e73ef.png"
+      image: "https://tse4.mm.bing.net/th/id/OIP.4sCk1KJpl0TobgHN0fsG_AHaHa?pid=Api&P=0&h=180"
     },
     {
       quote: "The bulk material supply for our emergency response was executed flawlessly. Alpha Groups understands the urgency of humanitarian work.",
       author: "Sarah Johnson",
       position: "Program Director",
       organization: "Save the Children India",
-      // image: "/lovable-uploads/93211eb5-6cd5-477d-858a-83e8f55e73ef.png"
+      image: "https://tse4.mm.bing.net/th/id/OIP.2HxDL5GRe5WJSuOHMI1qBwHaHa?pid=Api&P=0&h=180"
     }
   ];
 
@@ -70,11 +70,11 @@ const TestimonialsSection = () => {
                 </blockquote>
                 
                 <div className="flex items-center justify-center space-x-4">
-                  {/* <img
+                  <img
                     src={testimonials[currentIndex].image}
                     alt={testimonials[currentIndex].author}
                     className="w-16 h-16 rounded-full object-cover border-2 border-primary"
-                  /> */}
+                  />
                   <div className="text-center">
                     <div className="font-semibold text-lg text-foreground">
                       {testimonials[currentIndex].author}

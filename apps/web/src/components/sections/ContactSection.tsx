@@ -5,9 +5,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
+
 const ContactSection = () => {
   return (
-    <section id="contact" className="py-20 bg-background">
+    <section id="contact" className="py-10 bg-background">
       <div className="container mx-auto px-4 lg:px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-6">
@@ -18,7 +19,7 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
@@ -30,17 +31,17 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary">Email</h4>
-                    <p className="text-muted-foreground">info@alphaimpactlabs.com</p>
+                    <p className="text-muted-foreground">alphagroups1997@gmail.com</p>
                   </div>
                 </div>
-                
+              
                 <div className="flex items-start space-x-4">
                   <div className="p-3 bg-accent/10 rounded-full">
                     <Phone className="h-6 w-6 text-accent" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary">Phone</h4>
-                    <p className="text-muted-foreground">+91 98765 43210</p>
+                    <p className="text-muted-foreground">+91 9492882197</p>
                   </div>
                 </div>
                 
@@ -50,7 +51,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-primary">Office</h4>
-                    <p className="text-muted-foreground">Mumbai, Maharashtra, India</p>
+                    <p className="text-muted-foreground">Hyderabad, Telangana, India</p>
                   </div>
                 </div>
                 
@@ -67,7 +68,7 @@ const ContactSection = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
+          {/* Contact Form
           <Card>
             <CardHeader>
               <CardTitle>Send us a message</CardTitle>
@@ -81,20 +82,11 @@ const ContactSection = () => {
                   <Label htmlFor="firstName">First Name</Label>
                   <Input id="firstName" placeholder="John" />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" placeholder="Doe" />
-                </div>
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" placeholder="john@example.com" />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" type="tel" placeholder="+91 98765 43210" />
               </div>
               
               <div className="space-y-2">
@@ -115,7 +107,56 @@ const ContactSection = () => {
                 Send Message
               </Button>
             </CardContent>
-          </Card>
+          </Card> */}
+
+          {/* Contact Form */}
+<Card className="shadow-sm border rounded-md">
+  <CardHeader className="pb-2">
+    <CardTitle className="text-lg font-semibold">Send us a message</CardTitle>
+    <p className="text-sm text-muted-foreground">
+      We'll get back to you within 24 hours.
+    </p>
+  </CardHeader>
+
+  <CardContent className="space-y-3">
+    <div className="space-y-1">
+      <Label htmlFor="firstName" className="text-sm">First Name</Label>
+      <Input
+        id="firstName"
+        placeholder="John"
+        className="h-9 text-sm"
+      />
+    </div>
+
+    <div className="space-y-1">
+      <Label htmlFor="email" className="text-sm">Email</Label>
+      <Input
+        id="email"
+        type="email"
+        placeholder="john@example.com"
+        className="h-9 text-sm"
+      />
+    </div>
+
+    <div className="space-y-1">
+      <Label htmlFor="message" className="text-sm">Message</Label>
+      <Textarea
+        id="message"
+        placeholder="Tell us about your requirements..."
+        maxLength={100}
+        className="min-h-[80px] text-sm resize-none"
+      />
+      <p className="text-xs text-gray-500">Max 100 characters</p>
+    </div>
+
+    <Button
+      size="sm"
+      className="bg-blue-500 text-white hover:bg-blue-600 w-full"
+    >
+      Send Message
+    </Button>
+  </CardContent>
+</Card>
         </div>
       </div>
     </section>
