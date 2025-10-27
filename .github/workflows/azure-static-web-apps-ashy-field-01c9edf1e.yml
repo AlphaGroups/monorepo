@@ -1,4 +1,4 @@
-name: Deploy Web App (Next.js) to Azure Static Web Apps
+name: Deploy Web App to Azure Static Web Apps
 
 on:
   push:
@@ -21,22 +21,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build Next.js app
-        run: yarn build:web
-
-      - name: Detect build artifact
-        id: detect
+      - name: Build Next.js static export
+        env:
+          NODE_ENV: production
         run: |
-          # Your Next.js build output is .next, but Oryx copies built files to root (.)
-          if [ -d "apps/web/out" ]; then
-            echo "artifact=apps/web/out" >> $GITHUB_OUTPUT
-          elif [ -d "apps/web/.output" ]; then
-            echo "artifact=apps/web/.output" >> $GITHUB_OUTPUT
-          else
-            # Oryx builds inside /app and places files at the root, so use '.'
-            echo "artifact=." >> $GITHUB_OUTPUT
-          fi
-          echo "Detected artifact: ${{ steps.detect.outputs.artifact }}"
+          cd apps/web
+          yarn build  # this now runs `next build` which outputs to /out automatically
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
@@ -46,5 +36,5 @@ jobs:
           action: "upload"
           app_location: "apps/web"
           api_location: ""
-          # 👇 The critical fix — point to root of Oryx output, not apps/web
-          app_artifact_location: ${{ steps.detect.outputs.artifact }}
+          app_artifact_location: "apps/web/out"
+          
