@@ -1,15 +1,16 @@
-name: Azure Static Web Apps CI/CD (monorepo — auto-detect artifact)
+name: Deploy Web App (Next.js) to Azure Static Web Apps
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -20,37 +21,20 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build web app
+      - name: Build Next.js app
         run: yarn build:web
-
-      - name: Debug - list app folder and common build outputs
-        run: |
-          echo "Listing apps/web:"
-          ls -la apps/web || true
-          echo "Check common outputs:"
-          ls -la apps/web/build || true
-          ls -la apps/web/out || true
-          ls -la apps/web/.output || true
-          ls -la apps/web/dist || true
-          ls -la apps/web/.next || true
 
       - name: Detect build artifact
         id: detect
         run: |
-          if [ -d "apps/web/build" ]; then
-            echo "artifact=apps/web/build" >> $GITHUB_OUTPUT
-          elif [ -d "apps/web/out" ]; then
+          # Your Next.js build output is .next, but Oryx copies built files to root (.)
+          if [ -d "apps/web/out" ]; then
             echo "artifact=apps/web/out" >> $GITHUB_OUTPUT
           elif [ -d "apps/web/.output" ]; then
             echo "artifact=apps/web/.output" >> $GITHUB_OUTPUT
-          elif [ -d "apps/web/dist" ]; then
-            echo "artifact=apps/web/dist" >> $GITHUB_OUTPUT
-          elif [ -d "apps/web/.next" ]; then
-            # Oryx/Static Web Apps often copy usable static files to app root for Next.js
-            echo "artifact=apps/web" >> $GITHUB_OUTPUT
           else
-            # fallback to app root
-            echo "artifact=apps/web" >> $GITHUB_OUTPUT
+            # Oryx builds inside /app and places files at the root, so use '.'
+            echo "artifact=." >> $GITHUB_OUTPUT
           fi
           echo "Detected artifact: ${{ steps.detect.outputs.artifact }}"
 
@@ -61,5 +45,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "apps/web"
-          api_location: ""                          # set if you have an API folder
+          api_location: ""
+          # 👇 The critical fix — point to root of Oryx output, not apps/web
           app_artifact_location: ${{ steps.detect.outputs.artifact }}
