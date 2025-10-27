@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development next dev",
-    "build": "cross-env NODE_ENV=development next build",
-    "build:prod": "cross-env NODE_ENV=production next build",
-    "export": "cross-env NODE_ENV=production next build && next export",
+    "dev": "next dev",
+    "build": "next build",
+    "build:prod": "NODE_ENV=production next build",
+    "export": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "eslint"
   },
