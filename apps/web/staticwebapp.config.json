@@ -11,7 +11,7 @@
   "routes": [
     {
       "route": "/lms/*",
-      "redirect": "https://monorepo-lms.vercel.app*",
+      "redirect": "https://monorepo-lms.vercel.app/lms*",
       "statusCode": 301
     }
   ]
