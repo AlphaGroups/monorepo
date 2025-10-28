@@ -45,8 +45,8 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "apps/web"
-          output_location: "apps/web/out"
-          skip_app_build: true  # ✅ Prevent Oryx from rebuilding
+          output_location: "out"      # ✅ fixed
+          skip_app_build: true        # ✅ prevent Oryx from rebuilding
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
