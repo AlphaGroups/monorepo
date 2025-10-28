@@ -1,15 +1,39 @@
-name: Deploy via publish profile
+name: Deploy Web App (Next.js Export)
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to Azure Web App (publish profile)
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build static site
+        run: yarn build
+
+      # Add static server dependency for runtime
+      - name: Add static serve
+        run: yarn global add serve
+
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'alpha-web-app'
-          publish-profile: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          package: .
+          app-name: 'webappv1'   # your App Service name
+          publish-profile: ${{ secrets.AZURE_WEBAPP_WEB_PUBLISH_PROFILE }}
+          package: ./apps/web/out
