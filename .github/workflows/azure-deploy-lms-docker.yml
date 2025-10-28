@@ -3,26 +3,39 @@ name: Deploy LMS App (Docker, Node 22)
 on:
   push:
     branches:
-      - main   # adjust if needed
+      - main   # deploy when pushing to main branch
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1 — Checkout code
+      # Step 1 — Checkout your monorepo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2 — Build Docker image for LMS app
-      - name: Build Docker image
-        run: |
-          docker build -t lms-app:latest -f apps/lms/Dockerfile .
+      # Step 2 — Log in to Azure (optional but improves reliability)
+      - name: Azure Login (for deployment context)
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        continue-on-error: true
 
-      # Step 3 — Deploy container image directly via publish profile
-      - name: Deploy Docker container to Azure App Service
+      # Step 3 — Set up Docker Buildx (ensures caching + ARM/AMD compatibility)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 4 — Build Docker image for LMS app
+      - name: Build LMS Docker image
+        run: |
+          docker build \
+            -t lms-app:latest \
+            -f apps/lms/Dockerfile .
+
+      # Step 5 — Deploy built Docker image directly using Publish Profile
+      - name: Deploy Docker container to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'webappv4'  # <-- Your App Service name
+          app-name: 'webappv4'  # 🔹 Your App Service name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           images: 'lms-app:latest'

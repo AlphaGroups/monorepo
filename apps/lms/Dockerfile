@@ -10,8 +10,8 @@ COPY package.json yarn.lock ./
 # Copy only LMS workspace (and optionally shared utils if needed)
 COPY apps/lms ./apps/lms
 
-# Install dependencies — this respects Yarn workspaces
-RUN yarn install --frozen-lockfile
+# Install dependencies — use full install (need dev deps for build)
+RUN yarn install --frozen-lockfile --non-interactive --ignore-engines
 
 # Build the LMS app
 WORKDIR /app/apps/lms
@@ -23,11 +23,11 @@ FROM node:22-alpine AS runner
 
 WORKDIR /app
 
-# Copy built LMS app from builder
+# Copy the built LMS app from builder
 COPY --from=builder /app/apps/lms ./
 
 # Install only production dependencies
-RUN yarn install --production --frozen-lockfile
+RUN yarn install --production --non-interactive --ignore-engines
 
 # Set environment variables
 ENV NODE_ENV=production
