@@ -1,0 +1,28 @@
+name: Deploy LMS App (Docker, Node 22)
+
+on:
+  push:
+    branches:
+      - main   # adjust if needed
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1 — Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2 — Build Docker image for LMS app
+      - name: Build Docker image
+        run: |
+          docker build -t lms-app:latest -f apps/lms/Dockerfile .
+
+      # Step 3 — Deploy container image directly via publish profile
+      - name: Deploy Docker container to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'webappv4'  # <-- Your App Service name
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: 'lms-app:latest'
