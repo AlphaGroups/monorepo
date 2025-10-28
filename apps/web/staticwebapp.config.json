@@ -8,5 +8,11 @@
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "strict-origin-when-cross-origin"
   },
-  "routes": []
+  "routes": [
+    {
+      "route": "/lms/*",
+      "redirect": "https://monorepo-lms.vercel.app*",
+      "statusCode": 301
+    }
+  ]
 }
