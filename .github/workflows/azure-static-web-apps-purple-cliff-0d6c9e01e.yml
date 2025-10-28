@@ -14,6 +14,7 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Web App
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,10 +44,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_CLIFF_0D6C9E01E }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### Static Web App Configuration ######
-          app_location: "apps/web"         # Path to web app source
-          output_location: "apps/web/out"  # Output folder from Next.js export
-          ###### End Configuration ######
+          app_location: "apps/web"
+          output_location: "apps/web/out"
+          skip_app_build: true  # ✅ Prevent Oryx from rebuilding
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
